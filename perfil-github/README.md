@@ -7,14 +7,9 @@
 
 ### 👨‍💻 Sobre mim
 
-```javascript
-const ernani = {
-  curso: "Análise e Desenvolvimento de Sistemas",
-  stack: ["HTML", "CSS", "JavaScript", "SQL"],
-  objetivo: "Entender o caminho inteiro do dado: do clique na tela até a linha no banco",
-  lema: "Se funcionou de primeira, desconfie",
-};
-```
+- 🎓 Estudante de **Análise e Desenvolvimento de Sistemas**
+- 🎯 Meu objetivo: entender o caminho inteiro do dado, do clique na tela até a linha no banco
+- 🧩 Gosto daquele momento em que o front-end finalmente conversa com o banco de dados
 
 ### 🛠️ Stack
 
