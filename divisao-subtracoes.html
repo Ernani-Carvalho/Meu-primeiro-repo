@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Divisão por subtrações sucessivas</title>
+</head>
+<body>
+    <h1>Divisão por subtrações sucessivas</h1>
+
+    <label>Dividendo:</label>
+    <input type="number" id="dividendo">
+    <br><br>
+
+    <label>Divisor:</label>
+    <input type="number" id="divisor">
+    <br><br>
+
+    <button onclick="dividir()">Calcular</button>
+
+    <p id="resultado"></p>
+
+    <script>
+        function dividir() {
+            let dividendo = Number(document.getElementById("dividendo").value);
+            let divisor = Number(document.getElementById("divisor").value);
+            let saida = document.getElementById("resultado");
+
+            if (divisor == 0) {
+                saida.innerHTML = "Erro: não existe divisão por zero.";
+                return;
+            }
+
+            let resto = dividendo; // cópia, para não perder o valor original
+            let quociente = 0;
+
+            while (resto >= divisor) {
+                resto = resto - divisor;
+                quociente = quociente + 1;
+            }
+
+            saida.innerHTML = dividendo + " ÷ " + divisor + " = " + quociente + ", resto " + resto;
+        }
+    </script>
+</body>
+</html>
