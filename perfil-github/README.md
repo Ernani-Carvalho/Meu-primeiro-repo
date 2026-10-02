@@ -5,11 +5,10 @@
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1000&color=00D9FF&center=true&vCenter=true&width=650&lines=Ol%C3%A1%21%20Eu%20sou%20o%20Ernani%20%F0%9F%91%8B;Estudante%20de%20ADS%20%F0%9F%92%BB;SELECT%20%2A%20FROM%20desafios%20WHERE%20nivel%20%3D%20%27dificil%27;Do%20clique%20na%20tela%20at%C3%A9%20a%20linha%20no%20banco%20%F0%9F%9A%80" alt="Texto digitando" />
 </div>
 
-### 👨‍💻 Sobre mim
+### 📌 Resumo
 
-- 🎓 Estudante de **Análise e Desenvolvimento de Sistemas**
-- 🎯 Meu objetivo: entender o caminho inteiro do dado, do clique na tela até a linha no banco
-- 🧩 Gosto daquele momento em que o front-end finalmente conversa com o banco de dados
+- 🎓 Graduando em **Análise e Desenvolvimento de Sistemas**
+- 💻 Foco em desenvolvimento web integrado a banco de dados
 
 ### 🛠️ Stack
 
