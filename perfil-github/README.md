@@ -1,63 +1,35 @@
+<!-- Cabeçalho animado -->
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:00D9FF,100:7B2FF7&height=200&section=header&text=Ernani%20Carvalho&fontSize=48&fontColor=ffffff&fontAlignY=36&animation=fadeIn&desc=An%C3%A1lise%20e%20Desenvolvimento%20de%20Sistemas&descAlignY=56&descSize=18" alt="Ernani Carvalho" />
+
 <div align="center">
-
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=26&pause=1000&color=36BCF7&center=true&vCenter=true&width=600&lines=Ol%C3%A1%2C+eu+sou+o+Ernani!+%F0%9F%91%8B;Estudante+de+desenvolvimento+web;HTML+%E2%80%A2+CSS+%E2%80%A2+Flexbox+%E2%80%A2+Git" alt="Typing SVG" />
-
-<img src="https://img.shields.io/github/followers/Ernani-Carvalho?label=Seguidores&style=social" alt="Seguidores" />
-
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1000&color=00D9FF&center=true&vCenter=true&width=650&lines=Ol%C3%A1%21%20Eu%20sou%20o%20Ernani%20%F0%9F%91%8B;Estudante%20de%20ADS%20%F0%9F%92%BB;SELECT%20%2A%20FROM%20desafios%20WHERE%20nivel%20%3D%20%27dificil%27;Do%20clique%20na%20tela%20at%C3%A9%20a%20linha%20no%20banco%20%F0%9F%9A%80" alt="Texto digitando" />
 </div>
 
----
+### 👨‍💻 Sobre mim
 
-## 🙋‍♂️ Sobre mim
+```javascript
+const ernani = {
+  curso: "Análise e Desenvolvimento de Sistemas",
+  stack: ["HTML", "CSS", "JavaScript", "SQL"],
+  objetivo: "Entender o caminho inteiro do dado: do clique na tela até a linha no banco",
+  lema: "Se funcionou de primeira, desconfie",
+};
+```
 
-- 🎓 Estudante, aprendendo desenvolvimento web no **Projeto Integrador (PI)**
-- 🌱 No momento estudando **HTML, CSS, Flexbox e Git/GitHub**
-- 🎯 Objetivo: construir sites bonitos, responsivos e bem organizados
-- 💬 Aberto a trocar ideias e colaborar em projetos de estudo
+### 🛠️ Stack
 
----
-
-## 🛠️ Tecnologias e ferramentas
-
-<p align="left">
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
-  <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git" />
-  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" />
-  <img src="https://img.shields.io/badge/VS%20Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white" alt="VS Code" />
+<p align="center">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=html,css,js,mysql,git,vscode&theme=dark" alt="HTML, CSS, JavaScript, SQL, Git, VS Code" />
+  </a>
 </p>
 
----
+### 🐍 Minhas contribuições
 
-## 📂 Meus projetos
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Ernani-Carvalho/Ernani-Carvalho/output/github-snake-dark.svg" />
+  <img width="100%" alt="Cobrinha comendo minhas contribuições" src="https://raw.githubusercontent.com/Ernani-Carvalho/Ernani-Carvalho/output/github-snake.svg" />
+</picture>
 
-| Projeto | Descrição |
-|---|---|
-| 🌊 [Atividade-Aquatec](https://github.com/Ernani-Carvalho/Atividade-Aquatec) | Atividade de página web Aquatec |
-| 📦 [Atividade-FlexBox-02](https://github.com/Ernani-Carvalho/Atividade-FlexBox-02) | Prática de layouts com Flexbox |
-| 📦 [atividade-FLAXBOX-01](https://github.com/Ernani-Carvalho/atividade-FLAXBOX-01) | Primeiros passos com Flexbox |
-| 🎨 [Tipos de CSS](https://github.com/Ernani-Carvalho/tividade-em-sala---Tipos-de-CSS) | Atividade em sala: CSS inline, interno e externo |
-| 🚀 [Meu-primeiro-repo](https://github.com/Ernani-Carvalho/Meu-primeiro-repo) | Meu primeiro repositório, criado na aula de PI |
-
----
-
-## 📊 Estatísticas
-
-<div align="center">
-  <img height="165" src="https://github-readme-stats.vercel.app/api?username=Ernani-Carvalho&show_icons=true&theme=tokyonight&hide_border=true&locale=pt-br" alt="Estatísticas do GitHub" />
-  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=Ernani-Carvalho&layout=compact&theme=tokyonight&hide_border=true&locale=pt-br" alt="Linguagens mais usadas" />
-</div>
-
-<div align="center">
-  <img src="https://streak-stats.demolab.com?user=Ernani-Carvalho&theme=tokyonight&hide_border=true&locale=pt_br" alt="Sequência de contribuições" />
-</div>
-
----
-
-<div align="center">
-
-⭐ Obrigado pela visita! Fique à vontade para explorar meus repositórios.
-
-<img src="https://komarev.com/ghpvc/?username=Ernani-Carvalho&label=Visualiza%C3%A7%C3%B5es+do+perfil&color=36BCF7&style=flat" alt="Visualizações do perfil" />
-
-</div>
+<!-- Rodapé animado -->
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=0:7B2FF7,100:00D9FF&height=120&section=footer" alt="" />
