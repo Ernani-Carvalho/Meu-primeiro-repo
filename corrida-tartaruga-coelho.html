@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Corrida: Tartaruga x Coelho</title>
+</head>
+
+<body>
+    <h1>A Revanche: Tartarugo Devagarinho x Coelhildo Soneca</h1>
+
+    <label>Tamanho da pista (m):</label>
+    <input type="text" id="ipt_pista">
+    <br>
+    <br>
+    <label>Metros que a tartaruga anda por rodada:</label>
+    <input type="text" id="ipt_tartaruga">
+    <br>
+    <br>
+    <label>Metros que o coelho anda por rodada:</label>
+    <input type="text" id="ipt_coelho">
+    <br>
+    <br>
+    <label>A cada quantas rodadas o coelho dorme:</label>
+    <input type="text" id="ipt_soneca">
+    <br>
+    <br>
+    <button onclick="largada()">Dar a Largada</button>
+    <div id="div_msg"></div>
+</body>
+
+</html>
+
+
+<script>
+    function largada() {
+        div_msg.innerHTML = ""
+        let pista = Number(ipt_pista.value);
+        let passoTartaruga = Number(ipt_tartaruga.value);
+        let passoCoelho = Number(ipt_coelho.value);
+        let soneca = Number(ipt_soneca.value);
+
+        if (pista <= 0 || passoTartaruga <= 0 || passoCoelho <= 0 || soneca <= 0) {
+            div_msg.innerHTML = "Erro: todos os valores devem ser maiores que 0.";
+        } else if (passoTartaruga >= passoCoelho) {
+            div_msg.innerHTML = "Erro: a tartaruga deve andar menos que o coelho por rodada.";
+        } else if (soneca < 2) {
+            div_msg.innerHTML = "Erro: o intervalo da soneca deve ser no mínimo 2 (senão o coelho dormiria em todas as rodadas).";
+        } else {
+
+            let distTartaruga = 0;
+            let distCoelho = 0;
+            let rodada = 0;
+            let qtdSonecas = 0;
+
+            while (distTartaruga < pista && distCoelho < pista) {
+                rodada = rodada + 1;
+                distTartaruga = distTartaruga + passoTartaruga;
+
+                if (rodada % soneca == 0) {
+                    qtdSonecas = qtdSonecas + 1;
+                    div_msg.innerHTML += `Rodada ${rodada}: Tartarugo ${distTartaruga} m | Coelhildo ${distCoelho} m - Coelho dormindo (zzz...)<br>`;
+                } else {
+                    distCoelho = distCoelho + passoCoelho;
+                    div_msg.innerHTML += `Rodada ${rodada}: Tartarugo ${distTartaruga} m | Coelhildo ${distCoelho} m<br>`;
+                }
+            }
+
+            div_msg.innerHTML += `<br><b>Resultado:</b><br>`;
+
+            if (distTartaruga >= pista && distCoelho >= pista) {
+                div_msg.innerHTML += `<img src="tartaruga.png" width="150"> <img src="coelho.png" width="150"><br>`;
+                div_msg.innerHTML += `Empate na rodada ${rodada}!<br>`;
+            } else if (distTartaruga >= pista) {
+                let percentual = distCoelho / pista * 100;
+                div_msg.innerHTML += `<img src="tartaruga.png" width="150"><br>`;
+                div_msg.innerHTML += `Tartarugo Devagarinho venceu na rodada ${rodada}!<br>`;
+                div_msg.innerHTML += `Coelhildo Soneca completou ${percentual.toFixed(2)}% da pista.<br>`;
+            } else {
+                let percentual = distTartaruga / pista * 100;
+                div_msg.innerHTML += `<img src="coelho.png" width="150"><br>`;
+                div_msg.innerHTML += `Coelhildo Soneca venceu na rodada ${rodada}!<br>`;
+                div_msg.innerHTML += `Tartarugo Devagarinho completou ${percentual.toFixed(2)}% da pista.<br>`;
+            }
+
+            let percentualSonecas = qtdSonecas / rodada * 100;
+            div_msg.innerHTML += `O coelho tirou ${qtdSonecas} sonecas, o que representa ${percentualSonecas.toFixed(2)}% das rodadas.`;
+        }
+    }
+</script>
