@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="380" viewBox="0 0 760 380">
+  <defs>
+    <linearGradient id="head" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9d3ee"/>
+      <stop offset="1" stop-color="#8fb4dd"/>
+    </linearGradient>
+    <linearGradient id="idx" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c9c9c9"/>
+      <stop offset="1" stop-color="#b3b3b3"/>
+    </linearGradient>
+    <linearGradient id="tab" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4f4f4"/>
+      <stop offset="1" stop-color="#dcdcdc"/>
+    </linearGradient>
+    <!-- chave primária -->
+    <g id="pk">
+      <ellipse cx="0" cy="-3" rx="3.2" ry="3.6" fill="#f5c400" stroke="#9a7a00" stroke-width="0.8"/>
+      <rect x="-1.1" y="0" width="2.2" height="7" fill="#f5c400" stroke="#9a7a00" stroke-width="0.6"/>
+    </g>
+    <!-- coluna comum (losango vazado) -->
+    <polygon id="col" points="0,-5 5,0 0,5 -5,0" fill="#ffffff" stroke="#7fa6c9" stroke-width="1.2"/>
+    <!-- coluna NOT NULL (losango azul preenchido) -->
+    <polygon id="nn" points="0,-5 5,0 0,5 -5,0" fill="#4a86c8" stroke="#2f5f9a" stroke-width="0.8"/>
+    <!-- chave estrangeira (losango vermelho) -->
+    <polygon id="fk" points="0,-5 5,0 0,5 -5,0" fill="#e0574c" stroke="#a8322a" stroke-width="0.8"/>
+    <!-- ícone de tabela -->
+    <g id="tbl">
+      <rect x="0" y="0" width="15" height="13" fill="#ffffff" stroke="#2f5f9a" stroke-width="1.2"/>
+      <rect x="0" y="0" width="15" height="3.5" fill="#2f5f9a"/>
+      <line x1="0" y1="8" x2="15" y2="8" stroke="#2f5f9a" stroke-width="0.9"/>
+      <line x1="7.5" y1="3.5" x2="7.5" y2="13" stroke="#2f5f9a" stroke-width="0.9"/>
+    </g>
+  </defs>
+  <style>
+    text { font-family: Tahoma, "DejaVu Sans", Verdana, sans-serif; fill: #1a1a1a; }
+    .tname { font-size: 15px; font-weight: bold; }
+    .col { font-size: 12px; }
+    .idx { font-size: 12px; font-weight: bold; fill: #ffffff; }
+    .rel { stroke: #555555; stroke-width: 1.6; fill: none; stroke-dasharray: 9 6; }
+    .end { stroke: #555555; stroke-width: 1.4; fill: none; }
+  </style>
+
+  <!-- camada (layer) -->
+  <rect x="0" y="0" width="760" height="380" fill="#ffffff"/>
+  <rect x="2" y="2" width="756" height="376" fill="#f2f2fb" stroke="#c8c8dc" stroke-width="1"/>
+  <path d="M2,2 H238 L248,26 H2 Z" fill="url(#tab)" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="10" y="19" font-size="12">Funcionários e Supervisores</text>
+
+  <g>
+    <rect x="90" y="60" width="240" height="284" rx="6" fill="#a9c6e8" stroke="#8fa9c8"/>
+    <path d="M90,94 V66 a6,6 0 0 1 6,-6 H324 a6,6 0 0 1 6,6 V94 Z" fill="url(#head)"/>
+    <use href="#tbl" x="100" y="70"/>
+    <text x="124" y="83" class="tname">funcionario</text>
+    <polygon points="310,73 320,73 315,80" fill="#555"/>
+    <rect x="91" y="94" width="238" height="210" fill="#ffffff"/>
+    <use href="#pk" x="106" y="110"/>
+    <text x="118" y="114" class="col">pkFuncionario INT</text>
+    <use href="#nn" x="106" y="140"/>
+    <text x="118" y="144" class="col">nmFuncionario VARCHAR(45)</text>
+    <use href="#nn" x="106" y="170"/>
+    <text x="118" y="174" class="col">email VARCHAR(100)</text>
+    <use href="#nn" x="106" y="200"/>
+    <text x="118" y="204" class="col">salario DECIMAL(8,2)</text>
+    <use href="#nn" x="106" y="230"/>
+    <text x="118" y="234" class="col">dtAdmissao DATE</text>
+    <use href="#fk" x="106" y="260"/>
+    <text x="118" y="264" class="col">fkDepartamento INT</text>
+    <use href="#fk" x="106" y="290"/>
+    <text x="118" y="294" class="col">fkSupervisor INT</text>
+    <rect x="91" y="304" width="238" height="30" fill="url(#idx)"/>
+    <text x="102" y="324" class="idx">Indexes</text>
+    <polygon points="312,313 320,319 312,325" fill="#666"/>
+  </g>
+
+  <g>
+    <rect x="480" y="60" width="240" height="164" rx="6" fill="#a9c6e8" stroke="#8fa9c8"/>
+    <path d="M480,94 V66 a6,6 0 0 1 6,-6 H714 a6,6 0 0 1 6,6 V94 Z" fill="url(#head)"/>
+    <use href="#tbl" x="490" y="70"/>
+    <text x="514" y="83" class="tname">departamento</text>
+    <polygon points="700,73 710,73 705,80" fill="#555"/>
+    <rect x="481" y="94" width="238" height="90" fill="#ffffff"/>
+    <use href="#pk" x="496" y="110"/>
+    <text x="508" y="114" class="col">pkDepartamento INT</text>
+    <use href="#nn" x="496" y="140"/>
+    <text x="508" y="144" class="col">nmDepartamento VARCHAR(45)</text>
+    <use href="#nn" x="496" y="170"/>
+    <text x="508" y="174" class="col">andar INT</text>
+    <rect x="481" y="184" width="238" height="30" fill="url(#idx)"/>
+    <text x="492" y="204" class="idx">Indexes</text>
+    <polygon points="702,193 710,199 702,205" fill="#666"/>
+  </g>
+
+  <!-- funcionario (0..N) para departamento (1) -->
+  <polyline points="330,260 405,260 405,110 480,110" class="rel"/>
+  <path d="M348,260 L331,251 M348,260 L331,260 M348,260 L331,269" class="end"/>
+  <circle cx="355" cy="260" r="4.5" fill="#f2f2fb" stroke="#555555" stroke-width="1.4"/>
+  <path d="M462,102 L462,118 M468,102 L468,118" class="end"/>
+
+  <!-- autorrelacionamento: supervisor (0..1) para supervisionados (0..N) -->
+  <polyline points="90,290 34,290 34,110 90,110" class="rel"/>
+  <path d="M72,290 L89,281 M72,290 L89,290 M72,290 L89,299" class="end"/>
+  <circle cx="65" cy="290" r="4.5" fill="#f2f2fb" stroke="#555555" stroke-width="1.4"/>
+  <path d="M76,102 L76,118" class="end"/>
+  <circle cx="64" cy="110" r="4.5" fill="#f2f2fb" stroke="#555555" stroke-width="1.4"/>
+</svg>
