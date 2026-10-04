@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="320" viewBox="0 0 520 320">
+  <defs>
+    <linearGradient id="head" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9d3ee"/>
+      <stop offset="1" stop-color="#8fb4dd"/>
+    </linearGradient>
+    <linearGradient id="idx" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c9c9c9"/>
+      <stop offset="1" stop-color="#b3b3b3"/>
+    </linearGradient>
+    <linearGradient id="tab" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4f4f4"/>
+      <stop offset="1" stop-color="#dcdcdc"/>
+    </linearGradient>
+    <!-- chave primária -->
+    <g id="pk">
+      <ellipse cx="0" cy="-3" rx="3.2" ry="3.6" fill="#f5c400" stroke="#9a7a00" stroke-width="0.8"/>
+      <rect x="-1.1" y="0" width="2.2" height="7" fill="#f5c400" stroke="#9a7a00" stroke-width="0.6"/>
+    </g>
+    <!-- coluna comum (losango vazado) -->
+    <polygon id="col" points="0,-5 5,0 0,5 -5,0" fill="#ffffff" stroke="#7fa6c9" stroke-width="1.2"/>
+    <!-- coluna NOT NULL (losango azul preenchido) -->
+    <polygon id="nn" points="0,-5 5,0 0,5 -5,0" fill="#4a86c8" stroke="#2f5f9a" stroke-width="0.8"/>
+    <!-- chave estrangeira (losango vermelho) -->
+    <polygon id="fk" points="0,-5 5,0 0,5 -5,0" fill="#e0574c" stroke="#a8322a" stroke-width="0.8"/>
+    <!-- ícone de tabela -->
+    <g id="tbl">
+      <rect x="0" y="0" width="15" height="13" fill="#ffffff" stroke="#2f5f9a" stroke-width="1.2"/>
+      <rect x="0" y="0" width="15" height="3.5" fill="#2f5f9a"/>
+      <line x1="0" y1="8" x2="15" y2="8" stroke="#2f5f9a" stroke-width="0.9"/>
+      <line x1="7.5" y1="3.5" x2="7.5" y2="13" stroke="#2f5f9a" stroke-width="0.9"/>
+    </g>
+  </defs>
+  <style>
+    text { font-family: Tahoma, "DejaVu Sans", Verdana, sans-serif; fill: #1a1a1a; }
+    .tname { font-size: 15px; font-weight: bold; }
+    .col { font-size: 12px; }
+    .idx { font-size: 12px; font-weight: bold; fill: #ffffff; }
+    .rel { stroke: #555555; stroke-width: 1.6; fill: none; stroke-dasharray: 9 6; }
+    .end { stroke: #555555; stroke-width: 1.4; fill: none; }
+  </style>
+
+  <!-- camada (layer) -->
+  <rect x="0" y="0" width="520" height="320" fill="#ffffff"/>
+  <rect x="2" y="2" width="516" height="316" fill="#f2f2fb" stroke="#c8c8dc" stroke-width="1"/>
+  <path d="M2,2 H218 L228,26 H2 Z" fill="url(#tab)" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="10" y="19" font-size="12">Linha Cronológica de Zelda</text>
+
+  <!-- ===== tabela jogoZelda ===== -->
+  <g>
+    <rect x="130" y="60" width="260" height="224" rx="6" fill="#a9c6e8" stroke="#8fa9c8"/>
+    <path d="M130,94 V66 a6,6 0 0 1 6,-6 H384 a6,6 0 0 1 6,6 V94 Z" fill="url(#head)"/>
+    <use href="#tbl" x="140" y="70"/>
+    <text x="164" y="83" class="tname">jogoZelda</text>
+    <polygon points="370,73 380,73 375,80" fill="#555"/>
+    <rect x="131" y="94" width="258" height="150" fill="#ffffff"/>
+
+    <use href="#pk" x="146" y="111"/>
+    <text x="158" y="114" class="col">pkJogo INT</text>
+    <use href="#nn" x="146" y="139"/>
+    <text x="158" y="143" class="col">nmJogo VARCHAR(45)</text>
+    <use href="#nn" x="146" y="169"/>
+    <text x="158" y="173" class="col">anoLançamento YEAR</text>
+    <use href="#fk" x="146" y="199"/>
+    <text x="158" y="203" class="col">fkJogoAnterior INT</text>
+    <use href="#col" x="146" y="229"/>
+    <text x="158" y="233" class="col">nmConsole VARCHAR(45)</text>
+
+    <rect x="131" y="244" width="258" height="30" fill="url(#idx)"/>
+    <text x="142" y="264" class="idx">Indexes</text>
+    <polygon points="372,253 380,259 372,265" fill="#666"/>
+  </g>
+
+  <!-- autorrelacionamento: jogo anterior (0..1) para jogo seguinte (0..1) -->
+  <polyline points="130,199 70,199 70,110 130,110" class="rel"/>
+  <path d="M116,191 L116,207" class="end"/>
+  <circle cx="104" cy="199" r="4.5" fill="#f2f2fb" stroke="#555555" stroke-width="1.4"/>
+  <path d="M116,102 L116,118" class="end"/>
+  <circle cx="104" cy="110" r="4.5" fill="#f2f2fb" stroke="#555555" stroke-width="1.4"/>
+</svg>
