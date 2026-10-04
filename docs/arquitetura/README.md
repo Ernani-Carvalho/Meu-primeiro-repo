@@ -9,6 +9,8 @@ Monitoramento da lotação de ônibus em tempo quase real — projeto acadêmico
 | [`databus-arquitetura.svg`](databus-arquitetura.svg) | Diagrama vetorial para a documentação. Pode ser inserido como imagem (Word, PowerPoint, draw.io) ou ter o código colado direto em uma página HTML. Não usa CSS nem scripts, só atributos SVG, para abrir igual em qualquer ferramenta. |
 | [`databus-arquitetura.png`](databus-arquitetura.png) | Mesma imagem em PNG (3200 × 1800, proporção 16:9 de slide) para ferramentas que não aceitam SVG, como Google Slides e Canva. |
 
+Protótipo navegável da dashboard (camada 4): [`prototipo-dashboard/`](../../prototipo-dashboard/).
+
 **Regra principal:** lotação atual = total de entradas − total de saídas. Ocupação (%) = lotação atual ÷ capacidade máxima do ônibus × 100.
 
 ## 1. Legenda

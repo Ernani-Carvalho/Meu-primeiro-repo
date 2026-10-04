@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Painel DataBus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="topo__marca">
+      <svg class="topo__logo" viewBox="0 0 32 24" aria-hidden="true">
+        <rect x="1" y="1" width="30" height="17" rx="4" fill="currentColor"/>
+        <rect x="5" y="4.5" width="6" height="6" rx="1" class="topo__janela"/>
+        <rect x="13" y="4.5" width="6" height="6" rx="1" class="topo__janela"/>
+        <rect x="21" y="4.5" width="6" height="6" rx="1" class="topo__janela"/>
+        <circle cx="8.5" cy="19" r="3.2" class="topo__roda"/>
+        <circle cx="23.5" cy="19" r="3.2" class="topo__roda"/>
+      </svg>
+      <span class="topo__nome">DataBus</span>
+      <span class="topo__empresa">Viação Exemplo</span>
+    </div>
+    <div class="topo__status">
+      <span class="aovivo"><span class="aovivo__ponto" aria-hidden="true"></span>Ao vivo</span>
+      <span id="atualizado">carregando…</span>
+      <span class="selo" title="Horários e valores fictícios, gerados no navegador">Dados simulados</span>
+    </div>
+  </header>
+
+  <main class="painel">
+    <div class="painel__cabecalho">
+      <div>
+        <h1>Lotação da frota</h1>
+        <p class="painel__sub">Passageiros a bordo agora, comparados à capacidade de cada ônibus.</p>
+      </div>
+      <div class="filtro">
+        <label for="filtro-linha">Linha</label>
+        <select id="filtro-linha">
+          <option value="todas">Todas as linhas</option>
+        </select>
+      </div>
+    </div>
+
+    <p id="erro" class="aviso-erro" role="alert" hidden>Não foi possível atualizar os dados. Uma nova tentativa acontece em 5 segundos.</p>
+
+    <section class="indicadores" aria-label="Resumo da frota">
+      <article class="indicador">
+        <h2 class="indicador__rotulo"><span class="icone is-lotado" data-icone="lotado"></span>Ônibus lotados</h2>
+        <p class="indicador__valor" id="kpi-lotados">–</p>
+        <p class="indicador__contexto" id="kpi-lotados-contexto">–</p>
+      </article>
+      <article class="indicador">
+        <h2 class="indicador__rotulo">Passageiros a bordo</h2>
+        <p class="indicador__valor" id="kpi-passageiros">–</p>
+        <p class="indicador__contexto" id="kpi-passageiros-contexto">–</p>
+      </article>
+      <article class="indicador">
+        <h2 class="indicador__rotulo">Ocupação média</h2>
+        <p class="indicador__valor" id="kpi-ocupacao">–</p>
+        <span class="medidor" id="kpi-ocupacao-medidor"><span></span></span>
+      </article>
+      <article class="indicador">
+        <h2 class="indicador__rotulo">Ônibus em operação</h2>
+        <p class="indicador__valor" id="kpi-operacao">–</p>
+        <p class="indicador__contexto" id="kpi-operacao-contexto">–</p>
+      </article>
+    </section>
+
+    <div class="grade">
+      <section class="cartao" aria-labelledby="titulo-frota">
+        <header class="cartao__cabecalho">
+          <h2 id="titulo-frota">Frota agora</h2>
+          <p class="cartao__nota">Lotados primeiro · clique em um ônibus para ver o detalhe</p>
+        </header>
+        <div class="tabela-rolagem">
+          <table class="tabela-frota">
+            <thead>
+              <tr>
+                <th scope="col">Ônibus</th>
+                <th scope="col">Linha</th>
+                <th scope="col">Lotação</th>
+                <th scope="col" class="num">Ocupação</th>
+                <th scope="col">Situação</th>
+                <th scope="col">Última leitura</th>
+              </tr>
+            </thead>
+            <tbody id="frota-corpo"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="cartao" aria-labelledby="titulo-alertas">
+        <header class="cartao__cabecalho">
+          <h2 id="titulo-alertas">Alertas</h2>
+          <p class="cartao__nota">mais recentes primeiro</p>
+        </header>
+        <ol id="lista-alertas" class="lista-alertas"></ol>
+      </section>
+    </div>
+
+    <section class="cartao" id="detalhe" aria-labelledby="detalhe-titulo">
+      <header class="cartao__cabecalho">
+        <h2 id="detalhe-titulo">Ônibus</h2>
+        <p class="cartao__nota" id="detalhe-subtitulo"></p>
+      </header>
+
+      <div class="detalhe">
+        <div class="detalhe__agora">
+          <p class="rotulo">Lotação agora</p>
+          <p class="numero-grande"><span id="det-lotacao">–</span><small> / <span id="det-capacidade">–</span> lugares</small></p>
+          <span class="medidor medidor--grande" id="det-medidor"><span></span></span>
+          <div class="detalhe__situacao" id="det-situacao"></div>
+          <p class="detalhe__leitura" id="det-leitura"></p>
+
+          <dl class="conta" aria-label="Regra principal: entradas menos saídas">
+            <div><dt>Entradas hoje</dt><dd id="det-entradas">–</dd></div>
+            <span class="conta__sinal" aria-hidden="true">−</span>
+            <div><dt>Saídas hoje</dt><dd id="det-saidas">–</dd></div>
+            <span class="conta__sinal" aria-hidden="true">=</span>
+            <div class="conta__total"><dt>Lotação</dt><dd id="det-resultado">–</dd></div>
+          </dl>
+        </div>
+
+        <figure class="grafico">
+          <figcaption class="grafico__cabecalho">
+            <span class="rotulo">Lotação ao longo do dia</span>
+            <span class="legenda">
+              <span class="legenda__item"><span class="legenda__traco" aria-hidden="true"></span>Passageiros</span>
+              <span class="legenda__item"><span class="legenda__traco legenda__traco--capacidade" aria-hidden="true"></span>Capacidade</span>
+            </span>
+            <button type="button" class="botao-secundario" id="alternar-vista" aria-pressed="false">Ver tabela</button>
+          </figcaption>
+          <div class="grafico__caixa" id="grafico-caixa">
+            <canvas id="grafico-dia" role="img" aria-label="Gráfico da lotação do ônibus ao longo do dia"></canvas>
+          </div>
+          <div class="tabela-dia" id="tabela-dia" hidden></div>
+        </figure>
+
+        <div class="detalhe__eventos">
+          <p class="rotulo">Últimos eventos dos sensores</p>
+          <ol id="lista-eventos" class="lista-eventos"></ol>
+        </div>
+      </div>
+    </section>
+
+    <footer class="rodape">
+      Protótipo do DataBus. Os dados são simulados no navegador; no sistema real eles vêm da API
+      (<code>GET /api/lotacao</code>), consultada a cada 5 segundos.
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

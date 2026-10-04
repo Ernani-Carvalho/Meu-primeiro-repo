@@ -1,0 +1,903 @@
+/* ============================================================
+   DataBus · protótipo da dashboard de lotação
+   Layout: barra superior escura, como o letreiro de um terminal
+   de ônibus, e uma grade de cartões. O resumo fica no topo, a
+   frota e os alertas no meio e o detalhe do ônibus embaixo.
+   ============================================================ */
+
+:root {
+  /* Cores do tema claro */
+  --bg: #f2f4f7;
+  --superficie: #ffffff;
+  --superficie-2: #f6f8fb;
+  --tinta: #0e1726;
+  --tinta-2: #4a5567;
+  --tinta-3: #667185;
+  --linha: #e1e6ed;
+  --destaque: #1f5fd6;
+  --destaque-suave: #e7effc;
+  --serie-1: #2a78d6;
+  --topo: #0e1726;
+  --topo-tinta: #eef2f7;
+  --topo-tinta-2: #a9b4c4;
+
+  /* Situação do ônibus: iguais nos dois temas e sempre com ícone + texto */
+  --ok: #0ca30c;
+  --atencao: #fab219;
+  --critico: #d03b3b;
+  --sem-sinal: #898781;
+  --cor: var(--ok);
+
+  /* Tipografia: Barlow lembra a sinalização de trânsito */
+  --fonte: "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --fonte-numeros: "Barlow Semi Condensed", "Barlow", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+
+  --raio: 12px;
+  --respiro: clamp(16px, 3vw, 32px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0f17;
+    --superficie: #121a26;
+    --superficie-2: #172131;
+    --tinta: #edf1f6;
+    --tinta-2: #b3bdcb;
+    --tinta-3: #8792a4;
+    --linha: #243043;
+    --destaque: #6b9cf0;
+    --destaque-suave: #1a2a45;
+    --serie-1: #3987e5;
+    --topo: #05080d;
+    --topo-tinta: #edf1f6;
+    --topo-tinta-2: #a9b4c4;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0a0f17;
+  --superficie: #121a26;
+  --superficie-2: #172131;
+  --tinta: #edf1f6;
+  --tinta-2: #b3bdcb;
+  --tinta-3: #8792a4;
+  --linha: #243043;
+  --destaque: #6b9cf0;
+  --destaque-suave: #1a2a45;
+  --serie-1: #3987e5;
+  --topo: #05080d;
+  --topo-tinta: #edf1f6;
+  --topo-tinta-2: #a9b4c4;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--tinta);
+  font-family: var(--fonte);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+h1, h2, p, ol, dl, dd, figure {
+  margin: 0;
+}
+
+button, select {
+  font: inherit;
+  color: inherit;
+}
+
+code {
+  font-size: 0.92em;
+}
+
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 2px solid var(--destaque);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ---------- Barra superior ---------- */
+.topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 24px;
+  padding: 12px var(--respiro);
+  background: var(--topo);
+  color: var(--topo-tinta);
+}
+
+.topo__marca {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topo__logo {
+  width: 30px;
+  height: 23px;
+  color: var(--topo-tinta);
+}
+
+.topo__janela {
+  fill: var(--topo);
+}
+
+.topo__roda {
+  fill: var(--topo-tinta-2);
+  stroke: var(--topo);
+  stroke-width: 1.5;
+}
+
+.topo__nome {
+  font-family: var(--fonte-numeros);
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.topo__empresa {
+  padding-left: 12px;
+  border-left: 1px solid color-mix(in srgb, var(--topo-tinta-2) 45%, transparent);
+  color: var(--topo-tinta-2);
+  font-size: 14px;
+}
+
+.topo__status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  color: var(--topo-tinta-2);
+  font-size: 14px;
+}
+
+.aovivo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--topo-tinta);
+  font-weight: 600;
+}
+
+.aovivo__ponto {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ok);
+  animation: pulso 2s ease-out infinite;
+}
+
+@keyframes pulso {
+  from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 65%, transparent); }
+  to { box-shadow: 0 0 0 9px transparent; }
+}
+
+.selo {
+  padding: 2px 8px;
+  border: 1px solid color-mix(in srgb, var(--topo-tinta-2) 55%, transparent);
+  border-radius: 6px;
+  color: var(--topo-tinta);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ---------- Página ---------- */
+.painel {
+  display: grid;
+  gap: 20px;
+  max-width: 1360px;
+  margin-inline: auto;
+  padding-block: 24px 40px;
+  padding-inline: var(--respiro);
+}
+
+.painel__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 24px;
+}
+
+h1 {
+  font-family: var(--fonte-numeros);
+  font-size: clamp(26px, 3vw, 32px);
+  font-weight: 700;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.painel__sub {
+  max-width: 70ch;
+  margin-top: 4px;
+  color: var(--tinta-2);
+}
+
+.filtro {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filtro label {
+  color: var(--tinta-2);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.filtro select {
+  min-height: 38px;
+  padding: 6px 10px;
+  border: 1px solid var(--linha);
+  border-radius: 8px;
+  background: var(--superficie);
+  cursor: pointer;
+}
+
+.aviso-erro {
+  padding: 10px 14px;
+  border: 1px solid var(--critico);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--critico) 10%, var(--superficie));
+}
+
+/* ---------- Indicadores ---------- */
+.indicadores {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.indicador {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 16px 18px;
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  background: var(--superficie);
+}
+
+.indicador__rotulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--tinta-2);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.indicador__valor {
+  font-family: var(--fonte-numeros);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.indicador__valor small {
+  color: var(--tinta-3);
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.indicador__contexto {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--tinta-3);
+  font-size: 13px;
+}
+
+.indicador .medidor {
+  margin-top: 6px;
+}
+
+/* ---------- Cartões ---------- */
+.grade {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 20px;
+}
+
+.cartao {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  padding: 18px 20px;
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  background: var(--superficie);
+}
+
+.cartao__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.cartao h2 {
+  font-family: var(--fonte-numeros);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.cartao__nota {
+  color: var(--tinta-3);
+  font-size: 13px;
+}
+
+/* ---------- Medidor e situação ---------- */
+.is-normal { --cor: var(--ok); }
+.is-atencao { --cor: var(--atencao); }
+.is-lotado { --cor: var(--critico); }
+.is-sem-sinal { --cor: var(--sem-sinal); }
+
+.medidor {
+  display: block;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--cor) 22%, transparent);
+}
+
+.medidor > span {
+  display: block;
+  width: var(--pct, 0%);
+  max-width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  background: var(--cor);
+}
+
+.medidor--grande {
+  height: 12px;
+  border-radius: 6px;
+}
+
+.icone {
+  display: inline-block;
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--cor);
+}
+
+.icone svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 3px 5px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--cor) 15%, transparent);
+  color: var(--tinta);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ---------- Tabela da frota ---------- */
+.tabela-rolagem {
+  overflow-x: auto;
+}
+
+.tabela-frota {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tabela-frota th {
+  padding: 0 10px 8px;
+  border-bottom: 1px solid var(--linha);
+  color: var(--tinta-3);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tabela-frota td {
+  padding: 10px;
+  border-bottom: 1px solid var(--linha);
+  vertical-align: middle;
+}
+
+.tabela-frota tbody tr {
+  cursor: pointer;
+}
+
+.tabela-frota tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabela-frota tbody tr:hover td {
+  background: var(--superficie-2);
+}
+
+.tabela-frota tbody tr.selecionado td {
+  background: var(--destaque-suave);
+}
+
+.tabela-frota tr.is-sem-sinal td {
+  color: var(--tinta-3);
+}
+
+.tabela-frota .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.onibus-botao {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--fonte-numeros);
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.linha-celula {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.linha-badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 40px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--tinta);
+  color: var(--superficie);
+  font-family: var(--fonte-numeros);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.trajeto {
+  color: var(--tinta-2);
+  font-size: 13px;
+}
+
+.lotacao-celula {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lotacao-celula .medidor {
+  flex: none;
+  width: 100px;
+}
+
+.lotacao-numero,
+.leitura {
+  color: var(--tinta-3);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- Alertas ---------- */
+.lista-alertas,
+.lista-eventos {
+  display: grid;
+  padding: 0;
+  list-style: none;
+}
+
+.lista-alertas li + li {
+  border-top: 1px solid var(--linha);
+}
+
+.alerta {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 2px 10px;
+  width: 100%;
+  padding: 10px 6px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.alerta:hover {
+  background: var(--superficie-2);
+}
+
+.alerta .icone {
+  margin-top: 2px;
+}
+
+.alerta__titulo {
+  font-weight: 600;
+}
+
+.alerta__detalhe {
+  grid-column: 2;
+  color: var(--tinta-3);
+  font-size: 13px;
+}
+
+.alerta__hora {
+  grid-column: 3;
+  grid-row: 1;
+  color: var(--tinta-3);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lista-vazia {
+  padding: 8px 0;
+  color: var(--tinta-3);
+}
+
+/* ---------- Detalhe do ônibus ---------- */
+.detalhe {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 28px;
+}
+
+.rotulo {
+  color: var(--tinta-2);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.detalhe__agora {
+  display: grid;
+  gap: 10px;
+}
+
+.numero-grande {
+  font-family: var(--fonte-numeros);
+  font-size: 56px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.numero-grande small {
+  color: var(--tinta-2);
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.detalhe__situacao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  color: var(--tinta-2);
+  font-size: 14px;
+}
+
+.detalhe__leitura {
+  color: var(--tinta-3);
+  font-size: 13px;
+}
+
+.conta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 12px;
+  margin-top: 4px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--superficie-2);
+}
+
+.conta dt {
+  color: var(--tinta-3);
+  font-size: 12px;
+}
+
+.conta dd {
+  font-family: var(--fonte-numeros);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.conta__total dd {
+  font-weight: 700;
+}
+
+.conta__sinal {
+  padding-bottom: 2px;
+  color: var(--tinta-3);
+  font-family: var(--fonte-numeros);
+  font-size: 22px;
+}
+
+/* gráfico */
+.grafico {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.grafico__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+
+.grafico__cabecalho .botao-secundario {
+  margin-left: auto;
+}
+
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  color: var(--tinta-2);
+  font-size: 13px;
+}
+
+.legenda__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legenda__traco {
+  width: 18px;
+  border-top: 2px solid var(--serie-1);
+}
+
+.legenda__traco--capacidade {
+  border-top: 2px dashed var(--tinta-3);
+}
+
+.botao-secundario {
+  padding: 4px 12px;
+  border: 1px solid var(--linha);
+  border-radius: 8px;
+  background: var(--superficie);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao-secundario:hover {
+  background: var(--superficie-2);
+}
+
+.grafico__caixa {
+  position: relative;
+  height: 250px;
+}
+
+.tabela-dia {
+  max-height: 250px;
+  overflow: auto;
+  border: 1px solid var(--linha);
+  border-radius: 8px;
+}
+
+.tabela-dia table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabela-dia th,
+.tabela-dia td {
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--linha);
+  text-align: right;
+}
+
+.tabela-dia th:first-child,
+.tabela-dia td:first-child {
+  text-align: left;
+}
+
+.tabela-dia thead th {
+  position: sticky;
+  top: 0;
+  background: var(--superficie);
+  color: var(--tinta-3);
+  font-weight: 600;
+}
+
+/* eventos dos sensores */
+.detalhe__eventos {
+  display: grid;
+  gap: 8px;
+}
+
+.evento {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--linha);
+  font-size: 14px;
+}
+
+.evento:last-child {
+  border-bottom: 0;
+}
+
+.evento__hora {
+  color: var(--tinta-3);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.evento__tipo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.evento__tipo svg {
+  width: 16px;
+  height: 16px;
+  color: var(--tinta-2);
+}
+
+.evento__porta {
+  color: var(--tinta-3);
+  font-size: 13px;
+  text-align: right;
+}
+
+.rodape {
+  color: var(--tinta-3);
+  font-size: 13px;
+}
+
+/* ---------- Telas menores ---------- */
+@media (max-width: 1180px) {
+  .detalhe {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  }
+
+  .detalhe__eventos {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 1040px) {
+  .grade {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .indicadores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .detalhe {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .indicador__valor {
+    font-size: 34px;
+  }
+
+  .numero-grande {
+    font-size: 48px;
+  }
+}
+
+/* Celular: cada ônibus vira um cartão de duas linhas, sem rolagem lateral */
+@media (max-width: 640px) {
+  .tabela-frota {
+    min-width: 0;
+  }
+
+  .tabela-frota thead {
+    display: none;
+  }
+
+  .tabela-frota tbody,
+  .tabela-frota td {
+    display: block;
+  }
+
+  .tabela-frota tbody tr {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "onibus linha leitura situacao"
+      "lotacao lotacao lotacao ocupacao";
+    align-items: center;
+    gap: 8px 10px;
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--linha);
+  }
+
+  .tabela-frota tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .tabela-frota td {
+    padding: 0;
+    border: 0;
+  }
+
+  .tabela-frota tbody tr:hover td,
+  .tabela-frota tbody tr.selecionado td {
+    background: none;
+  }
+
+  .tabela-frota tbody tr:hover {
+    background: var(--superficie-2);
+  }
+
+  .tabela-frota tbody tr.selecionado {
+    background: var(--destaque-suave);
+  }
+
+  .c-onibus { grid-area: onibus; }
+  .c-linha { grid-area: linha; }
+  .c-lotacao { grid-area: lotacao; }
+  .c-ocupacao { grid-area: ocupacao; }
+  .c-situacao { grid-area: situacao; }
+  .c-leitura { grid-area: leitura; }
+
+  .trajeto {
+    display: none;
+  }
+
+  .lotacao-celula .medidor {
+    flex: 1;
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aovivo__ponto {
+    animation: none;
+  }
+}
