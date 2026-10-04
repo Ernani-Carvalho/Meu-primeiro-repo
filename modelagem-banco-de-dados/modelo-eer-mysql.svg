@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="400" viewBox="0 0 960 400">
+  <defs>
+    <!-- Chave primária (ícone amarelo do Workbench) -->
+    <g id="pk">
+      <circle cx="0" cy="0" r="3.6" fill="#f2c200" stroke="#a07c00" stroke-width="1"/>
+      <rect x="2.6" y="-1.2" width="7" height="2.4" fill="#f2c200" stroke="#a07c00" stroke-width="0.8"/>
+      <rect x="6.6" y="1.2" width="1.6" height="2.4" fill="#f2c200" stroke="#a07c00" stroke-width="0.6"/>
+    </g>
+    <!-- Coluna NOT NULL (losango azul) -->
+    <polygon id="nn" points="0,-5 5,0 0,5 -5,0" fill="#3b7dd8" stroke="#22548f" stroke-width="0.8"/>
+    <!-- Chave estrangeira NOT NULL (losango vermelho) -->
+    <polygon id="fk" points="0,-5 5,0 0,5 -5,0" fill="#e0453a" stroke="#99231b" stroke-width="0.8"/>
+    <!-- Ícone de tabela no cabeçalho -->
+    <g id="tbl">
+      <rect x="0" y="0" width="13" height="11" fill="#ffffff" stroke="#3d6688" stroke-width="1"/>
+      <rect x="0" y="0" width="13" height="3" fill="#3d6688"/>
+      <line x1="0" y1="7" x2="13" y2="7" stroke="#3d6688" stroke-width="0.8"/>
+      <line x1="6.5" y1="3" x2="6.5" y2="11" stroke="#3d6688" stroke-width="0.8"/>
+    </g>
+  </defs>
+  <style>
+    text { font-family: "Liberation Sans", Arial, Helvetica, sans-serif; fill: #1a1a1a; }
+    .tname { font-size: 13px; font-weight: bold; }
+    .col { font-size: 12px; }
+    .type { font-size: 12px; fill: #444444; }
+    .idx { font-size: 11px; fill: #333333; }
+    .head { fill: #98bfda; stroke: #5f87a8; stroke-width: 1; }
+    .body { fill: #ffffff; stroke: #5f87a8; stroke-width: 1; }
+    .idxbar { fill: #ececec; stroke: #5f87a8; stroke-width: 1; }
+    .rel { stroke: #333333; stroke-width: 1.3; fill: none; stroke-dasharray: 6 4; }
+    .end { stroke: #333333; stroke-width: 1.3; fill: none; }
+    .lbl { font-size: 11px; fill: #555555; font-style: italic; }
+    .note { font-size: 11px; fill: #555555; }
+  </style>
+
+  <rect width="960" height="400" fill="#ffffff"/>
+  <text x="24" y="30" font-size="15" font-weight="bold">Modelo EER (MySQL Workbench) — Funcionário, Supervisor e Área</text>
+
+  <!-- ===== Tabela funcionario ===== -->
+  <rect x="180" y="80" width="240" height="26" class="head"/>
+  <use href="#tbl" x="188" y="87"/>
+  <text x="208" y="97" class="tname">funcionario</text>
+  <text x="406" y="97" font-size="9" text-anchor="middle" fill="#3d6688">▼</text>
+  <rect x="180" y="106" width="240" height="114" class="body"/>
+
+  <use href="#pk" x="192" y="122"/>
+  <text x="208" y="126" class="col">id_funcionario</text><text x="320" y="126" class="type">INT</text>
+  <use href="#nn" x="194" y="144"/>
+  <text x="208" y="148" class="col">nome</text><text x="320" y="148" class="type">VARCHAR(100)</text>
+  <use href="#nn" x="194" y="166"/>
+  <text x="208" y="170" class="col">cpf</text><text x="320" y="170" class="type">CHAR(11)</text>
+  <use href="#fk" x="194" y="188"/>
+  <text x="208" y="192" class="col">id_supervisor</text><text x="320" y="192" class="type">INT</text>
+  <use href="#fk" x="194" y="210"/>
+  <text x="208" y="214" class="col">id_area</text><text x="320" y="214" class="type">INT</text>
+
+  <rect x="180" y="220" width="240" height="20" class="idxbar"/>
+  <text x="190" y="234" class="idx">Indexes</text>
+  <text x="406" y="234" font-size="9" text-anchor="middle" fill="#555">▶</text>
+
+  <!-- ===== Tabela area ===== -->
+  <rect x="640" y="80" width="220" height="26" class="head"/>
+  <use href="#tbl" x="648" y="87"/>
+  <text x="668" y="97" class="tname">area</text>
+  <text x="846" y="97" font-size="9" text-anchor="middle" fill="#3d6688">▼</text>
+  <rect x="640" y="106" width="220" height="48" class="body"/>
+
+  <use href="#pk" x="652" y="122"/>
+  <text x="668" y="126" class="col">id_area</text><text x="760" y="126" class="type">INT</text>
+  <use href="#nn" x="654" y="144"/>
+  <text x="668" y="148" class="col">nome</text><text x="760" y="148" class="type">VARCHAR(50)</text>
+
+  <rect x="640" y="154" width="220" height="20" class="idxbar"/>
+  <text x="650" y="168" class="idx">Indexes</text>
+  <text x="846" y="168" font-size="9" text-anchor="middle" fill="#555">▶</text>
+
+  <!-- ===== funcionario.id_area -> area.id_area (1:N) ===== -->
+  <polyline points="420,210 530,210 530,122 640,122" class="rel"/>
+  <!-- muitos (1..N) no lado funcionario -->
+  <path d="M438,210 L420,201 M438,210 L420,210 M438,210 L420,219 M444,202 L444,218" class="end"/>
+  <!-- um e somente um no lado area -->
+  <path d="M624,114 L624,130 M630,114 L630,130" class="end"/>
+  <text x="538" y="170" class="lbl">trabalha em</text>
+
+  <!-- ===== Autorrelacionamento funcionario.id_supervisor -> funcionario.id_funcionario ===== -->
+  <polyline points="180,188 120,188 120,122 180,122" class="rel"/>
+  <!-- um e somente um no lado supervisor (PK) -->
+  <path d="M164,114 L164,130 M170,114 L170,130" class="end"/>
+  <!-- muitos (1..N) no lado supervisionado (FK) -->
+  <path d="M162,188 L180,179 M162,188 L180,188 M162,188 L180,197 M156,180 L156,196" class="end"/>
+  <text transform="translate(110,155) rotate(-90)" class="lbl" text-anchor="middle">supervisiona</text>
+
+  <!-- ===== Legenda ===== -->
+  <line x1="24" y1="290" x2="936" y2="290" stroke="#dddddd"/>
+  <use href="#pk" x="30" y="314"/><text x="46" y="318" class="note">chave primária (PK)</text>
+  <use href="#fk" x="180" y="314"/><text x="192" y="318" class="note">chave estrangeira (FK), NOT NULL</text>
+  <use href="#nn" x="390" y="314"/><text x="402" y="318" class="note">coluna NOT NULL</text>
+  <line x1="520" y1="314" x2="556" y2="314" class="rel"/>
+  <text x="564" y="318" class="note">relacionamento não identificador</text>
+
+  <line x1="24" y1="346" x2="60" y2="346" class="end"/>
+  <path d="M48,338 L48,354 M54,338 L54,354" class="end"/>
+  <text x="68" y="350" class="note">um e somente um</text>
+  <line x1="180" y1="346" x2="216" y2="346" class="end"/>
+  <path d="M198,346 L216,337 M198,346 L216,346 M198,346 L216,355 M192,338 L192,354" class="end"/>
+  <text x="224" y="350" class="note">um ou muitos</text>
+  <text x="24" y="380" class="note">funcionario.id_supervisor → funcionario.id_funcionario (cada funcionário tem 1 supervisor; cada supervisor tem 1..N supervisionados)  ·  funcionario.id_area → area.id_area</text>
+</svg>
