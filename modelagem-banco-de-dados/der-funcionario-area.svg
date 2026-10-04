@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="500" viewBox="0 0 1400 500">
+  <style>
+    text { font-family: "Liberation Sans", Arial, Helvetica, sans-serif; fill: #1f2937; }
+    .title { font-size: 24px; font-weight: bold; }
+    .section { font-size: 18px; font-weight: bold; fill: #1e3a8a; }
+    .entity { fill: #e8f0fe; stroke: #1e3a8a; stroke-width: 2; }
+    .entity-name { font-size: 17px; font-weight: bold; text-anchor: middle; }
+    .rel { fill: #fff7e6; stroke: #b45309; stroke-width: 2; }
+    .rel-name { font-size: 15px; text-anchor: middle; }
+    .line { stroke: #1f2937; stroke-width: 1.8; fill: none; }
+    .role { font-size: 14px; font-style: italic; fill: #374151; }
+    .card { font-size: 15px; font-weight: bold; fill: #c2410c; }
+    .attr { font-size: 14px; text-anchor: middle; }
+    .attr-dot { stroke: #1f2937; stroke-width: 1.6; }
+    .small { font-size: 13px; fill: #374151; }
+    .box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1.2; }
+    .box-title { font-size: 15px; font-weight: bold; }
+    .rule { font-size: 13.5px; }
+    .rule-card { font-size: 13.5px; font-weight: bold; fill: #c2410c; }
+    .tbl-head { fill: #1e3a8a; }
+    .tbl-head-text { font-size: 15px; font-weight: bold; fill: #ffffff; text-anchor: middle; }
+    .tbl-row { fill: #ffffff; stroke: #94a3b8; stroke-width: 1; }
+    .tbl-row-alt { fill: #f1f5f9; stroke: #94a3b8; stroke-width: 1; }
+    .tbl-border { fill: none; stroke: #1e3a8a; stroke-width: 2; }
+    .col { font-size: 13px; }
+    .pk { font-size: 12px; font-weight: bold; fill: #a16207; text-anchor: middle; }
+    .fk { font-size: 12px; font-weight: bold; fill: #1d4ed8; text-anchor: middle; }
+    .type { font-size: 12.5px; fill: #4b5563; }
+    .constr { font-size: 12px; fill: #6b7280; }
+    .crow { stroke: #1f2937; stroke-width: 1.8; fill: none; }
+    .rel-label { font-size: 14px; font-style: italic; fill: #b45309; }
+    .arrow { font-family: "DejaVu Sans", sans-serif; }
+    .mult { font-size: 12.5px; font-weight: bold; fill: #c2410c; }
+  </style>
+
+  <rect width="1400" height="500" fill="#ffffff"/>
+
+  <!-- Título -->
+  <text x="40" y="45" class="title">DER — Funcionário, Supervisor e Área</text>
+  <line x1="40" y1="62" x2="1360" y2="62" stroke="#cbd5e1" stroke-width="1.5"/>
+
+  <!-- ============ 1. MODELO CONCEITUAL ============ -->
+  <text x="40" y="100" class="section">Diagrama Entidade-Relacionamento (modelo conceitual)</text>
+
+  <!-- Autorrelacionamento: supervisiona -->
+  <line x1="270" y1="190" x2="270" y2="290" class="line"/>
+  <line x1="430" y1="190" x2="430" y2="290" class="line"/>
+  <polygon points="350,155 430,190 350,225 270,190" class="rel"/>
+  <text x="350" y="195" class="rel-name">supervisiona</text>
+
+  <text x="262" y="232" class="role" text-anchor="end">supervisor</text>
+  <text x="262" y="280" class="card" text-anchor="end">(1,1)</text>
+  <text x="438" y="232" class="role">supervisionado</text>
+  <text x="438" y="280" class="card">(1,N)</text>
+
+  <!-- Entidade FUNCIONÁRIO -->
+  <rect x="230" y="290" width="240" height="60" class="entity"/>
+  <text x="350" y="326" class="entity-name">FUNCIONÁRIO</text>
+
+  <!-- Atributos de FUNCIONÁRIO -->
+  <line x1="270" y1="350" x2="270" y2="388" class="line"/>
+  <circle cx="270" cy="394" r="6" fill="#1f2937" class="attr-dot"/>
+  <text x="270" y="420" class="attr">matrícula</text>
+  <line x1="350" y1="350" x2="350" y2="388" class="line"/>
+  <circle cx="350" cy="394" r="6" fill="#ffffff" class="attr-dot"/>
+  <text x="350" y="420" class="attr">nome</text>
+  <line x1="430" y1="350" x2="430" y2="388" class="line"/>
+  <circle cx="430" cy="394" r="6" fill="#ffffff" class="attr-dot"/>
+  <text x="430" y="420" class="attr">cpf</text>
+
+  <!-- Relacionamento: trabalha em -->
+  <line x1="470" y1="320" x2="570" y2="320" class="line"/>
+  <line x1="740" y1="320" x2="840" y2="320" class="line"/>
+  <polygon points="655,285 740,320 655,355 570,320" class="rel"/>
+  <text x="655" y="325" class="rel-name">trabalha em</text>
+  <text x="478" y="343" class="card">(1,N)</text>
+  <text x="832" y="343" class="card" text-anchor="end">(1,1)</text>
+
+  <!-- Entidade ÁREA -->
+  <rect x="840" y="290" width="200" height="60" class="entity"/>
+  <text x="940" y="326" class="entity-name">ÁREA</text>
+
+  <!-- Atributos de ÁREA -->
+  <line x1="900" y1="350" x2="900" y2="388" class="line"/>
+  <circle cx="900" cy="394" r="6" fill="#1f2937" class="attr-dot"/>
+  <text x="900" y="420" class="attr">código</text>
+  <line x1="980" y1="350" x2="980" y2="388" class="line"/>
+  <circle cx="980" cy="394" r="6" fill="#ffffff" class="attr-dot"/>
+  <text x="980" y="420" class="attr">nome</text>
+
+  <!-- Legenda do conceitual -->
+  <circle cx="236" cy="456" r="5" fill="#1f2937" class="attr-dot"/>
+  <text x="248" y="461" class="small">atributo identificador</text>
+  <circle cx="410" cy="456" r="5" fill="#ffffff" class="attr-dot"/>
+  <text x="422" y="461" class="small">atributo</text>
+  <text x="520" y="461" class="small">O supervisor também é um FUNCIONÁRIO <tspan class="arrow">→</tspan> autorrelacionamento (relacionamento recursivo).</text>
+
+  <!-- Regras de negócio -->
+  <rect x="1080" y="120" width="290" height="300" rx="8" class="box"/>
+  <text x="1096" y="148" class="box-title">Regras de negócio <tspan class="arrow">→</tspan> cardinalidade</text>
+  <text class="rule">
+    <tspan x="1096" y="178">1. Funcionário tem no mínimo 1 e no</tspan>
+    <tspan x="1096" dy="18">máximo 1 supervisor</tspan>
+  </text>
+  <text x="1096" y="214" class="rule-card"><tspan class="arrow">→</tspan> lado supervisor: (1,1)</text>
+  <text class="rule">
+    <tspan x="1096" y="246">2. Supervisor supervisiona no mínimo</tspan>
+    <tspan x="1096" dy="18">1 e no máximo N funcionários</tspan>
+  </text>
+  <text x="1096" y="282" class="rule-card"><tspan class="arrow">→</tspan> lado supervisionado: (1,N)</text>
+  <text class="rule">
+    <tspan x="1096" y="314">3. Funcionário trabalha em somente</tspan>
+    <tspan x="1096" dy="18">1 área</tspan>
+  </text>
+  <text x="1096" y="350" class="rule-card"><tspan class="arrow">→</tspan> lado ÁREA: (1,1)</text>
+  <text class="rule">
+    <tspan x="1096" y="382">4. Área tem muitos funcionários</tspan>
+  </text>
+  <text x="1096" y="400" class="rule-card"><tspan class="arrow">→</tspan> lado FUNCIONÁRIO: (1,N)</text>
+
+</svg>
