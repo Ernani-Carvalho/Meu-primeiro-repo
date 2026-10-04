@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="320" viewBox="0 0 760 320">
+  <defs>
+    <linearGradient id="head" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9d3ee"/>
+      <stop offset="1" stop-color="#8fb4dd"/>
+    </linearGradient>
+    <linearGradient id="idx" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c9c9c9"/>
+      <stop offset="1" stop-color="#b3b3b3"/>
+    </linearGradient>
+    <linearGradient id="tab" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4f4f4"/>
+      <stop offset="1" stop-color="#dcdcdc"/>
+    </linearGradient>
+    <!-- chave primária -->
+    <g id="pk">
+      <ellipse cx="0" cy="-3" rx="3.2" ry="3.6" fill="#f5c400" stroke="#9a7a00" stroke-width="0.8"/>
+      <rect x="-1.1" y="0" width="2.2" height="7" fill="#f5c400" stroke="#9a7a00" stroke-width="0.6"/>
+    </g>
+    <!-- coluna comum (losango vazado) -->
+    <polygon id="col" points="0,-5 5,0 0,5 -5,0" fill="#ffffff" stroke="#7fa6c9" stroke-width="1.2"/>
+    <!-- chave estrangeira (losango vermelho) -->
+    <polygon id="fk" points="0,-5 5,0 0,5 -5,0" fill="#e0574c" stroke="#a8322a" stroke-width="0.8"/>
+    <!-- ícone de tabela -->
+    <g id="tbl">
+      <rect x="0" y="0" width="15" height="13" fill="#ffffff" stroke="#2f5f9a" stroke-width="1.2"/>
+      <rect x="0" y="0" width="15" height="3.5" fill="#2f5f9a"/>
+      <line x1="0" y1="8" x2="15" y2="8" stroke="#2f5f9a" stroke-width="0.9"/>
+      <line x1="7.5" y1="3.5" x2="7.5" y2="13" stroke="#2f5f9a" stroke-width="0.9"/>
+    </g>
+  </defs>
+  <style>
+    text { font-family: Tahoma, "DejaVu Sans", Verdana, sans-serif; fill: #1a1a1a; }
+    .tname { font-size: 15px; font-weight: bold; }
+    .col { font-size: 12px; }
+    .idx { font-size: 12px; font-weight: bold; fill: #ffffff; }
+    .rel { stroke: #555555; stroke-width: 1.6; fill: none; stroke-dasharray: 9 6; }
+    .end { stroke: #555555; stroke-width: 1.4; fill: none; }
+  </style>
+
+  <!-- camada (layer) -->
+  <rect x="0" y="0" width="760" height="320" fill="#ffffff"/>
+  <rect x="2" y="2" width="756" height="316" fill="#f2f2fb" stroke="#c8c8dc" stroke-width="1"/>
+  <path d="M2,2 H178 L188,26 H2 Z" fill="url(#tab)" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="10" y="19" font-size="12">Funcionário e Área</text>
+
+  <!-- ===== tabela funcionario ===== -->
+  <g>
+    <rect x="80" y="60" width="230" height="224" rx="6" fill="#a9c6e8" stroke="#8fa9c8"/>
+    <path d="M80,94 V66 a6,6 0 0 1 6,-6 H304 a6,6 0 0 1 6,6 V94 Z" fill="url(#head)"/>
+    <use href="#tbl" x="90" y="70"/>
+    <text x="114" y="83" class="tname">funcionario</text>
+    <polygon points="290,73 300,73 295,80" fill="#555"/>
+    <rect x="81" y="94" width="228" height="150" fill="#ffffff"/>
+
+    <use href="#pk" x="96" y="111"/>
+    <text x="108" y="114" class="col">idFuncionario INT</text>
+    <use href="#col" x="96" y="139"/>
+    <text x="108" y="143" class="col">nome VARCHAR(45)</text>
+    <use href="#col" x="96" y="169"/>
+    <text x="108" y="173" class="col">cpf CHAR(11)</text>
+    <use href="#fk" x="96" y="199"/>
+    <text x="108" y="203" class="col">fkSupervisor INT</text>
+    <use href="#fk" x="96" y="229"/>
+    <text x="108" y="233" class="col">fkArea INT</text>
+
+    <rect x="81" y="244" width="228" height="30" fill="url(#idx)"/>
+    <text x="92" y="264" class="idx">Indexes</text>
+    <polygon points="292,253 300,259 292,265" fill="#666"/>
+  </g>
+
+  <!-- ===== tabela area ===== -->
+  <g>
+    <rect x="470" y="60" width="210" height="134" rx="6" fill="#a9c6e8" stroke="#8fa9c8"/>
+    <path d="M470,94 V66 a6,6 0 0 1 6,-6 H674 a6,6 0 0 1 6,6 V94 Z" fill="url(#head)"/>
+    <use href="#tbl" x="480" y="70"/>
+    <text x="504" y="83" class="tname">area</text>
+    <polygon points="660,73 670,73 665,80" fill="#555"/>
+    <rect x="471" y="94" width="208" height="60" fill="#ffffff"/>
+
+    <use href="#pk" x="486" y="111"/>
+    <text x="498" y="114" class="col">idArea INT</text>
+    <use href="#col" x="486" y="139"/>
+    <text x="498" y="143" class="col">nome VARCHAR(45)</text>
+
+    <rect x="471" y="154" width="208" height="30" fill="url(#idx)"/>
+    <text x="482" y="174" class="idx">Indexes</text>
+    <polygon points="662,163 670,169 662,175" fill="#666"/>
+  </g>
+
+  <!-- funcionario (N) para area (1) -->
+  <polyline points="310,229 390,229 390,124 470,124" class="rel"/>
+  <path d="M328,229 L311,220 M328,229 L311,229 M328,229 L311,238 M333,221 L333,237" class="end"/>
+  <path d="M452,116 L452,132 M458,116 L458,132" class="end"/>
+
+  <!-- autorrelacionamento: supervisor (1) para supervisionados (N) -->
+  <polyline points="80,199 40,199 40,110 80,110" class="rel"/>
+  <path d="M63,191 L63,207 M62,199 L79,190 M62,199 L79,199 M62,199 L79,208" class="end"/>
+  <path d="M64,102 L64,118 M70,102 L70,118" class="end"/>
+</svg>
