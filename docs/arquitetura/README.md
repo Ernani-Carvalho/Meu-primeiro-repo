@@ -7,7 +7,7 @@ Monitoramento da lotação de ônibus em tempo quase real — projeto acadêmico
 | Arquivo | Uso |
 |---|---|
 | [`databus-arquitetura.svg`](databus-arquitetura.svg) | Diagrama vetorial para a documentação. Pode ser inserido como imagem (Word, PowerPoint, draw.io) ou ter o código colado direto em uma página HTML. Não usa CSS nem scripts, só atributos SVG, para abrir igual em qualquer ferramenta. |
-| [`databus-arquitetura.png`](databus-arquitetura.png) | Mesma imagem em PNG (3520 × 2020) para ferramentas que não aceitam SVG, como Google Slides e Canva. |
+| [`databus-arquitetura.png`](databus-arquitetura.png) | Mesma imagem em PNG (3200 × 1800, proporção 16:9 de slide) para ferramentas que não aceitam SVG, como Google Slides e Canva. |
 
 **Regra principal:** lotação atual = total de entradas − total de saídas. Ocupação (%) = lotação atual ÷ capacidade máxima do ônibus × 100.
 
@@ -17,9 +17,9 @@ Monitoramento da lotação de ônibus em tempo quase real — projeto acadêmico
 
 | Camada · ambiente | Componente | Tecnologia | Função |
 |---|---|---|---|
-| 1 · Ônibus | Sensores ultrassônicos (um por porta) | HC-SR04 | Medem a distância até o piso; a queda brusca da distância indica a passagem de um passageiro. |
-| 1 · Ônibus | Microcontrolador | Arduino UNO (firmware em C/C++) | Lê os sensores, confirma a passagem e gera o evento de entrada ou de saída. |
-| 1 · Ônibus | Módulo Wi-Fi | ESP8266 (ESP-01) | Conecta o Arduino à rede e envia cada evento à API. |
+| 1 · Ônibus | Sensores de entrada e de saída (um por porta) | Ultrassônico (modelo sugerido: HC-SR04) | Medem a distância até o piso; a queda brusca da distância indica a passagem de um passageiro. |
+| 1 · Ônibus | Microcontrolador | Arduino UNO (firmware em C/C++) | Lê os sensores, detecta a passagem e gera o evento de entrada ou de saída. |
+| 1 · Ônibus | Módulo Wi-Fi | ESP8266 (módulo ESP-01) | Conecta o Arduino à rede e envia cada evento à API. |
 | 2 · Servidor da API | API DataBus | Node.js + Express | Recebe e valida os eventos, registra data e hora, grava e consulta o banco, calcula a lotação e entrega os arquivos do site. |
 | 3 · Máquina virtual | Banco de dados | MySQL Server | Guarda empresas, ônibus (com a capacidade máxima) e eventos. |
 | 3 · Máquina virtual | Sistema e virtualização | Lubuntu Server sobre VirtualBox | Ambiente isolado que hospeda o MySQL dentro do computador hospedeiro. |
@@ -30,27 +30,26 @@ Monitoramento da lotação de ônibus em tempo quase real — projeto acadêmico
 
 | Nº | Origem → destino | O que trafega | Protocolo / meio |
 |---|---|---|---|
-| 1 | Sensores → Arduino | Pulso de eco cuja duração indica a distância | Sinal digital nos pinos GPIO (Trig/Echo), por fios |
-| 2 | Arduino → Módulo Wi-Fi | Evento: identificação do ônibus, porta e tipo (entrada/saída) | Comunicação serial (UART) |
-| 3 | Módulo Wi-Fi → API | `POST /api/eventos` com o evento em JSON | HTTP/REST via Wi-Fi + internet |
-| 4 | API → MySQL | `INSERT` do evento com data e hora | Conexão SQL (driver `mysql2`), TCP 3306 |
-| 5 | Dashboard → API | `GET /api/lotacao`, a cada 5 s | HTTP/REST (`fetch()` no navegador) |
-| 6 | MySQL → API | Resultado do `SELECT`: totais de entradas e saídas e capacidade | Conexão SQL, TCP 3306 |
-| 7 | API → Dashboard | JSON com lotação atual, capacidade e % de ocupação | HTTP/REST (resposta) |
-| 8 | Dashboard → Usuário | Lotação × capacidade em gráficos e indicadores | Interface no navegador |
+| 1 | Sensores → Arduino | Leitura de distância (pulso de eco) | Sinal digital nos pinos GPIO, por fios |
+| 2 | Arduino → Módulo Wi-Fi | Evento de passagem: identificação do ônibus, porta e tipo (entrada/saída) | Comunicação serial (UART) |
+| 3 | Módulo Wi-Fi → API | Evento em JSON (`POST /api/eventos`) | HTTP/REST via Wi-Fi + internet |
+| 4 | API → MySQL | Gravação do evento com data e hora (`INSERT`) | Conexão SQL (driver `mysql2`), TCP 3306 |
+| 5 | MySQL → API | Totais de entradas e saídas e capacidade do ônibus (`SELECT`) | Conexão SQL, TCP 3306 |
+| 6 | API → Dashboard | Lotação atual, capacidade e % de ocupação em JSON (`GET /api/lotacao`) | HTTP/REST, a cada 5 s |
+| 7 | Dashboard → Usuário | Lotação × capacidade em gráficos | Tela do navegador |
 
-Convenções do desenho: seta contínua com número em círculo cheio = fluxo de gravação (1–4); seta tracejada com número em círculo vazado = fluxo de consulta (5–8); borda contínua = ambiente físico; borda tracejada = ambiente lógico ou externo; texto em itálico = protocolo ou meio de comunicação.
+Convenções do desenho: seta contínua com número em círculo cheio = gravação dos dados (1–4); seta tracejada com número em círculo vazado = consulta da dashboard (5–7); borda contínua = ambiente físico; borda tracejada = ambiente lógico ou externo; texto em itálico = protocolo ou meio de comunicação. As setas seguem o sentido do dado: na consulta, é a dashboard que pede os dados à API a cada 5 s, e a resposta percorre os passos 5, 6 e 7.
 
 ## 2. Fluxo de ponta a ponta
 
-O fluxo do DataBus começa dentro do ônibus. Sensores ultrassônicos HC-SR04 instalados acima das portas de entrada e de saída medem continuamente a distância até o piso e enviam pulsos de eco ao Arduino UNO (1); quando a distância cai e depois volta ao normal, o firmware reconhece a passagem de um passageiro e gera um evento de entrada ou de saída. O evento, com a identificação do ônibus, a porta e o tipo, segue por comunicação serial até o módulo Wi-Fi ESP8266 (2), que o envia pela rede sem fio e pela internet à API DataBus em uma requisição HTTP POST com corpo em JSON (3). A API, desenvolvida em Node.js com Express, valida os dados, registra a data e a hora do evento e o grava no banco MySQL (4), executado em uma máquina virtual Lubuntu Server no VirtualBox. Do lado do cliente, a dashboard do site DataBus (HTML, CSS e JavaScript), aberta no navegador da empresa de transporte, consulta a mesma API a cada poucos segundos (5). A API busca no banco os totais de entradas e de saídas e a capacidade de cada ônibus (6), calcula a lotação atual (total de entradas menos total de saídas) e o percentual de ocupação em relação à capacidade máxima, e devolve esses valores em JSON (7). Por fim, a dashboard apresenta a lotação de cada ônibus em gráficos e indicadores (8), permitindo à empresa acompanhar a ocupação da frota em tempo quase real.
+O fluxo do DataBus começa dentro do ônibus. Sensores ultrassônicos instalados acima das portas de entrada e de saída medem continuamente a distância até o piso e enviam essas leituras ao Arduino UNO (1); quando a distância cai e depois volta ao normal, o firmware reconhece a passagem de um passageiro e gera um evento de entrada ou de saída. O evento, com a identificação do ônibus, a porta e o tipo, segue por comunicação serial até o módulo Wi-Fi ESP8266 (2), que o envia pela rede sem fio e pela internet à API DataBus em uma requisição HTTP com corpo em JSON (3). A API, desenvolvida em Node.js com Express, valida a leitura, registra a data e a hora e grava o evento no banco MySQL (4), executado em uma máquina virtual Lubuntu Server no VirtualBox. Do lado do cliente, a dashboard do site DataBus (HTML, CSS e JavaScript), aberta no navegador da empresa de transporte, pede os dados à mesma API a cada poucos segundos: a API busca no banco os totais de entradas e de saídas e a capacidade de cada ônibus (5), calcula a lotação atual (total de entradas menos total de saídas) e o percentual de ocupação em relação à capacidade máxima, e devolve esses valores em JSON (6). Por fim, a dashboard apresenta a lotação de cada ônibus em gráficos (7), permitindo à empresa acompanhar a ocupação da frota em tempo quase real.
 
 ## 3. Premissas adotadas no diagrama
 
 Pontos que a descrição do projeto não definia e que o diagrama assume. Ajuste se a equipe decidir de outro jeito.
 
 - **Módulo ESP8266 (ESP-01) ligado por serial ao Arduino**, porque o Arduino UNO não tem Wi-Fi próprio.
-- **Sensor HC-SR04**, o modelo ultrassônico mais comum para Arduino.
+- **Sensor HC-SR04** como modelo sugerido (o mais comum para Arduino); o diagrama mostra só "ultrassônico".
 - **Data e hora registradas pela API** quando o evento chega, porque o Arduino UNO não tem relógio.
 - **Consulta da dashboard a cada 5 s** (polling), suficiente para "tempo quase real".
 - **Site entregue pelo mesmo servidor Express da API** (arquivos estáticos); é assim que o site "consulta os dados por meio da própria API".
