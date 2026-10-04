@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="380" viewBox="0 0 760 380">
+  <defs>
+    <linearGradient id="head" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#b9d3ee"/>
+      <stop offset="1" stop-color="#8fb4dd"/>
+    </linearGradient>
+    <linearGradient id="idx" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c9c9c9"/>
+      <stop offset="1" stop-color="#b3b3b3"/>
+    </linearGradient>
+    <linearGradient id="tab" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4f4f4"/>
+      <stop offset="1" stop-color="#dcdcdc"/>
+    </linearGradient>
+    <!-- chave primária -->
+    <g id="pk">
+      <ellipse cx="0" cy="-3" rx="3.2" ry="3.6" fill="#f5c400" stroke="#9a7a00" stroke-width="0.8"/>
+      <rect x="-1.1" y="0" width="2.2" height="7" fill="#f5c400" stroke="#9a7a00" stroke-width="0.6"/>
+    </g>
+    <!-- coluna comum (losango vazado) -->
+    <polygon id="col" points="0,-5 5,0 0,5 -5,0" fill="#ffffff" stroke="#7fa6c9" stroke-width="1.2"/>
+    <!-- coluna NOT NULL (losango azul preenchido) -->
+    <polygon id="nn" points="0,-5 5,0 0,5 -5,0" fill="#4a86c8" stroke="#2f5f9a" stroke-width="0.8"/>
+    <!-- chave estrangeira (losango vermelho) -->
+    <polygon id="fk" points="0,-5 5,0 0,5 -5,0" fill="#e0574c" stroke="#a8322a" stroke-width="0.8"/>
+    <!-- ícone de tabela -->
+    <g id="tbl">
+      <rect x="0" y="0" width="15" height="13" fill="#ffffff" stroke="#2f5f9a" stroke-width="1.2"/>
+      <rect x="0" y="0" width="15" height="3.5" fill="#2f5f9a"/>
+      <line x1="0" y1="8" x2="15" y2="8" stroke="#2f5f9a" stroke-width="0.9"/>
+      <line x1="7.5" y1="3.5" x2="7.5" y2="13" stroke="#2f5f9a" stroke-width="0.9"/>
+    </g>
+  </defs>
+  <style>
+    text { font-family: Tahoma, "DejaVu Sans", Verdana, sans-serif; fill: #1a1a1a; }
+    .tname { font-size: 15px; font-weight: bold; }
+    .col { font-size: 12px; }
+    .idx { font-size: 12px; font-weight: bold; fill: #ffffff; }
+    .rel { stroke: #555555; stroke-width: 1.6; fill: none; stroke-dasharray: 9 6; }
+    .end { stroke: #555555; stroke-width: 1.4; fill: none; }
+  </style>
+
+  <!-- camada (layer) -->
+  <rect x="0" y="0" width="760" height="380" fill="#ffffff"/>
+  <rect x="2" y="2" width="756" height="376" fill="#f2f2fb" stroke="#c8c8dc" stroke-width="1"/>
+  <path d="M2,2 H178 L188,26 H2 Z" fill="url(#tab)" stroke="#c0c0c0" stroke-width="1"/>
+  <text x="10" y="19" font-size="12">Biblioteca e Livros</text>
+
+  <g>
+    <rect x="60" y="60" width="240" height="284" rx="6" fill="#a9c6e8" stroke="#8fa9c8"/>
+    <path d="M60,94 V66 a6,6 0 0 1 6,-6 H294 a6,6 0 0 1 6,6 V94 Z" fill="url(#head)"/>
+    <use href="#tbl" x="70" y="70"/>
+    <text x="94" y="83" class="tname">livro</text>
+    <polygon points="280,73 290,73 285,80" fill="#555"/>
+    <rect x="61" y="94" width="238" height="210" fill="#ffffff"/>
+    <use href="#pk" x="76" y="110"/>
+    <text x="88" y="114" class="col">pkLivro INT</text>
+    <use href="#nn" x="76" y="140"/>
+    <text x="88" y="144" class="col">titulo VARCHAR(100)</text>
+    <use href="#nn" x="76" y="170"/>
+    <text x="88" y="174" class="col">qtdPaginas INT</text>
+    <use href="#nn" x="76" y="200"/>
+    <text x="88" y="204" class="col">anoPublicacao INT</text>
+    <use href="#nn" x="76" y="230"/>
+    <text x="88" y="234" class="col">preco DECIMAL(6,2)</text>
+    <use href="#nn" x="76" y="260"/>
+    <text x="88" y="264" class="col">situacao VARCHAR(20)</text>
+    <use href="#fk" x="76" y="290"/>
+    <text x="88" y="294" class="col">fkAutor INT</text>
+    <rect x="61" y="304" width="238" height="30" fill="url(#idx)"/>
+    <text x="72" y="324" class="idx">Indexes</text>
+    <polygon points="282,313 290,319 282,325" fill="#666"/>
+  </g>
+
+  <g>
+    <rect x="470" y="60" width="240" height="194" rx="6" fill="#a9c6e8" stroke="#8fa9c8"/>
+    <path d="M470,94 V66 a6,6 0 0 1 6,-6 H704 a6,6 0 0 1 6,6 V94 Z" fill="url(#head)"/>
+    <use href="#tbl" x="480" y="70"/>
+    <text x="504" y="83" class="tname">autor</text>
+    <polygon points="690,73 700,73 695,80" fill="#555"/>
+    <rect x="471" y="94" width="238" height="120" fill="#ffffff"/>
+    <use href="#pk" x="486" y="110"/>
+    <text x="498" y="114" class="col">pkAutor INT</text>
+    <use href="#nn" x="486" y="140"/>
+    <text x="498" y="144" class="col">nmAutor VARCHAR(45)</text>
+    <use href="#nn" x="486" y="170"/>
+    <text x="498" y="174" class="col">nacionalidade VARCHAR(45)</text>
+    <use href="#col" x="486" y="200"/>
+    <text x="498" y="204" class="col">dtNascimento DATE</text>
+    <rect x="471" y="214" width="238" height="30" fill="url(#idx)"/>
+    <text x="482" y="234" class="idx">Indexes</text>
+    <polygon points="692,223 700,229 692,235" fill="#666"/>
+  </g>
+
+  <!-- livro (0..N) para autor (1) -->
+  <polyline points="300,290 385,290 385,110 470,110" class="rel"/>
+  <path d="M318,290 L301,281 M318,290 L301,290 M318,290 L301,299" class="end"/>
+  <circle cx="325" cy="290" r="4.5" fill="#f2f2fb" stroke="#555555" stroke-width="1.4"/>
+  <path d="M452,102 L452,118 M458,102 L458,118" class="end"/>
+</svg>
