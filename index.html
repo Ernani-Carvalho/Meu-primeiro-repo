@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quer Namorar Comigo?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grandstander:wght@500;700;900&family=Nunito:wght@500;700;800&family=Caveat:wght@600&display=swap">
+<style>
+  /* Layout: uma única cena noturna roxa, cartão central; botões vivem no cartão até o "não" fugir pela tela toda */
+  :root {
+    --night: #1e0b3a;
+    --plum: #3b1670;
+    --violet: #7b3fe4;
+    --lilac: #c9a7ff;
+    --butter: #ffd84d;
+    --honey: #ffb300;
+    --cream: #fff8e1;
+    --ink: #2a0f4d;
+    --blush: #ff8fc7;
+    --display: "Grandstander", "Baloo 2", "Comic Sans MS", system-ui, sans-serif;
+    --body: "Nunito", "Segoe UI", system-ui, sans-serif;
+    --hand: "Caveat", "Segoe Print", cursive;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+
+  body {
+    margin: 0;
+    font-family: var(--body);
+    color: var(--cream);
+    background:
+      radial-gradient(1200px 700px at 15% 10%, #5a22a8 0%, transparent 60%),
+      radial-gradient(900px 600px at 90% 90%, #4a1a8c 0%, transparent 55%),
+      var(--night);
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    padding-inline: 16px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* estrelinhas de fundo */
+  .sky { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star {
+    position: absolute;
+    width: var(--s, 3px); height: var(--s, 3px);
+    background: var(--butter);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--butter);
+    opacity: .7;
+    animation: twinkle var(--d, 3s) ease-in-out infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes twinkle { 0%,100% { opacity: .15; transform: scale(.6); } 50% { opacity: 1; transform: scale(1.2); } }
+
+  .floaty {
+    position: absolute; bottom: -40px;
+    font-size: var(--fs, 22px);
+    color: var(--lilac);
+    opacity: .5;
+    animation: rise var(--d, 12s) linear infinite;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes rise {
+    0% { transform: translateY(0) rotate(0); opacity: 0; }
+    10% { opacity: .55; }
+    100% { transform: translateY(-115vh) rotate(25deg); opacity: 0; }
+  }
+
+  /* cartão principal */
+  .card {
+    position: relative; z-index: 1;
+    width: min(460px, 100%);
+    padding: 36px 28px 32px;
+    border-radius: 32px;
+    background: linear-gradient(160deg, rgba(123,63,228,.55), rgba(59,22,112,.75));
+    border: 2px solid rgba(255,216,77,.45);
+    box-shadow:
+      0 0 0 8px rgba(201,167,255,.08),
+      0 30px 80px rgba(10,0,30,.6),
+      inset 0 1px 0 rgba(255,255,255,.15);
+    backdrop-filter: blur(6px);
+    text-align: center;
+    animation: pop-in .8s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  @keyframes pop-in { from { transform: scale(.85) translateY(20px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  .envelope-heart {
+    width: 96px; height: 96px; margin: 0 auto 8px;
+    display: grid; place-items: center;
+    animation: beat 1.3s ease-in-out infinite;
+  }
+  .envelope-heart svg { width: 100%; height: 100%; filter: drop-shadow(0 6px 18px rgba(255,216,77,.5)); }
+  @keyframes beat { 0%,100% { transform: scale(1); } 15% { transform: scale(1.12); } 30% { transform: scale(.98); } 45% { transform: scale(1.08); } }
+
+  .eyebrow {
+    font-family: var(--hand);
+    font-size: 1.6rem;
+    color: var(--butter);
+    margin: 0;
+    transform: rotate(-3deg);
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: clamp(2.1rem, 8vw, 3rem);
+    line-height: 1.05;
+    margin: 6px 0 12px;
+    text-wrap: balance;
+    background: linear-gradient(180deg, var(--cream) 30%, var(--butter));
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+    text-shadow: 0 4px 30px rgba(255,216,77,.25);
+  }
+
+  .sub {
+    margin: 0 auto 26px;
+    max-width: 32ch;
+    color: var(--lilac);
+    font-size: 1.05rem;
+    min-height: 1.5em;
+    transition: color .3s;
+  }
+
+  .buttons {
+    display: flex; gap: 18px;
+    justify-content: center; align-items: center;
+    flex-wrap: wrap;
+    min-height: 70px;
+  }
+
+  button {
+    font-family: var(--display);
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    border-radius: 999px;
+    transition: transform .25s cubic-bezier(.3,1.6,.5,1), box-shadow .25s, font-size .3s, padding .3s;
+  }
+  button:focus-visible { outline: 3px dashed var(--butter); outline-offset: 4px; }
+
+  #yes {
+    font-size: calc(1.3rem * var(--grow, 1));
+    padding: calc(14px * var(--grow, 1)) calc(40px * var(--grow, 1));
+    color: var(--ink);
+    background: linear-gradient(180deg, #ffe680, var(--butter) 50%, var(--honey));
+    box-shadow: 0 6px 0 #c98a00, 0 12px 30px rgba(255,200,40,.45);
+    position: relative; z-index: 3;
+  }
+  #yes:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 9px 0 #c98a00, 0 18px 40px rgba(255,200,40,.6); }
+  #yes:active { transform: translateY(4px); box-shadow: 0 2px 0 #c98a00, 0 6px 16px rgba(255,200,40,.4); }
+
+  #no {
+    font-size: 1.1rem;
+    padding: 12px 30px;
+    color: var(--cream);
+    background: rgba(255,255,255,.08);
+    border: 2px solid var(--lilac);
+    z-index: 5;
+    transition: left .35s cubic-bezier(.3,1.5,.5,1), top .35s cubic-bezier(.3,1.5,.5,1), transform .3s;
+  }
+  #no.running { position: fixed; }
+
+  .footnote {
+    margin: 22px 0 0;
+    font-family: var(--hand);
+    font-size: 1.2rem;
+    color: rgba(255,248,225,.55);
+  }
+
+  /* ======== tela do SIM ======== */
+  .celebrate {
+    position: fixed; inset: 0; z-index: 10;
+    display: grid; place-items: center;
+    padding-inline: 16px;
+    background:
+      radial-gradient(circle at 50% 45%, rgba(255,216,77,.35), transparent 55%),
+      linear-gradient(180deg, #4b1c93, var(--night));
+    opacity: 0; pointer-events: none;
+    transition: opacity .6s ease;
+  }
+  .celebrate.show { opacity: 1; pointer-events: auto; }
+
+  #confetti { position: fixed; inset: 0; z-index: 11; pointer-events: none; }
+
+  .scene {
+    position: relative; z-index: 12;
+    text-align: center;
+    transform: scale(.6); opacity: 0;
+  }
+  .celebrate.show .scene { animation: scene-in .9s .2s cubic-bezier(.2,1.5,.4,1) forwards; }
+  @keyframes scene-in { to { transform: scale(1); opacity: 1; } }
+
+  /* os dois bichinhos */
+  .couple {
+    position: relative;
+    width: 300px; max-width: 100%; height: 200px; margin-top: 30px;
+    margin: 0 auto;
+  }
+  .critter {
+    position: absolute; bottom: 10px;
+    width: 120px; height: 120px;
+    border-radius: 50% 50% 46% 46% / 58% 58% 42% 42%;
+    animation: bounce 1.2s ease-in-out infinite;
+  }
+  .critter.left  { left: 6px;  background: radial-gradient(circle at 35% 30%, #ffeaa0, var(--butter) 55%, var(--honey)); --tilt: 8deg; }
+  .critter.right { right: 6px; background: radial-gradient(circle at 35% 30%, #e3d0ff, var(--lilac) 55%, #9d6cf0); --tilt: -8deg; animation-delay: .15s; }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0) rotate(var(--tilt)) scale(1, 1); }
+    40% { transform: translateY(-16px) rotate(var(--tilt)) scale(.97, 1.04); }
+    55% { transform: translateY(0) rotate(var(--tilt)) scale(1.06, .94); }
+  }
+  /* orelhinhas */
+  .critter::before, .critter::after {
+    content: ""; position: absolute; top: -14px;
+    width: 30px; height: 36px;
+    background: inherit;
+    border-radius: 50% 50% 40% 40%;
+  }
+  .critter::before { left: 16px; transform: rotate(-18deg); }
+  .critter::after  { right: 16px; transform: rotate(18deg); }
+
+  .eye {
+    position: absolute; top: 46px;
+    width: 12px; height: 16px;
+    background: var(--ink);
+    border-radius: 50%;
+    animation: blink 4s infinite;
+  }
+  .eye::after { content: ""; position: absolute; top: 3px; left: 3px; width: 4px; height: 4px; background: #fff; border-radius: 50%; }
+  .eye.l { left: 34px; } .eye.r { right: 34px; }
+  @keyframes blink { 0%,92%,100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+
+  .cheek {
+    position: absolute; top: 66px;
+    width: 18px; height: 10px;
+    background: var(--blush);
+    border-radius: 50%;
+    opacity: .75;
+  }
+  .cheek.l { left: 20px; } .cheek.r { right: 20px; }
+
+  .mouth {
+    position: absolute; top: 66px; left: 50%;
+    width: 18px; height: 10px;
+    transform: translateX(-50%);
+    border: 3px solid var(--ink);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+  }
+
+  .arm {
+    position: absolute; top: 72px;
+    width: 26px; height: 16px;
+    background: inherit; border-radius: 50%;
+    filter: brightness(.95);
+  }
+  .critter.left .arm  { right: -12px; transform: rotate(-25deg); }
+  .critter.right .arm { left: -12px;  transform: rotate(25deg); }
+
+  .big-heart {
+    position: absolute; left: 50%; top: -34px; z-index: 2;
+    width: 80px; height: 80px;
+    transform: translateX(-50%);
+    animation: beat 1s ease-in-out infinite;
+    filter: drop-shadow(0 0 22px rgba(255,216,77,.8));
+  }
+
+  .mini-hearts { position: absolute; inset: 0; pointer-events: none; }
+  .mini-hearts span {
+    position: absolute; left: 50%; top: -10px;
+    font-size: 18px; color: var(--blush);
+    animation: puff 2.4s ease-out infinite;
+    animation-delay: var(--delay);
+  }
+  @keyframes puff {
+    0% { transform: translate(-50%, 0) scale(.3); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translate(calc(-50% + var(--x)), -110px) scale(1.2); opacity: 0; }
+  }
+
+  .yay {
+    font-family: var(--display);
+    font-weight: 900;
+    font-size: clamp(2.4rem, 10vw, 4rem);
+    margin: 18px 0 4px;
+    line-height: 1;
+    color: var(--butter);
+    text-shadow: 0 4px 0 #b06d00, 0 10px 40px rgba(255,216,77,.55);
+  }
+  .yay span { display: inline-block; animation: wave 1.6s ease-in-out infinite; animation-delay: calc(var(--i) * .08s); }
+  @keyframes wave { 0%,100% { transform: translateY(0); } 30% { transform: translateY(-12px) rotate(-4deg); } }
+
+  .love-note {
+    font-family: var(--hand);
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    color: var(--cream);
+    margin: 10px auto 0;
+    max-width: 24ch;
+    text-wrap: balance;
+  }
+
+  .stamp {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 8px 18px;
+    border: 2px dashed var(--butter);
+    border-radius: 14px;
+    font-family: var(--display);
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    font-size: .85rem;
+    color: var(--butter);
+    transform: rotate(-4deg);
+    background: rgba(255,216,77,.08);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sky" id="sky" aria-hidden="true"></div>
+
+<main class="card" id="card">
+  <div class="envelope-heart" aria-hidden="true">
+    <svg viewBox="0 0 100 100">
+      <defs>
+        <linearGradient id="hg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#ffe680"/>
+          <stop offset="1" stop-color="#ffb300"/>
+        </linearGradient>
+      </defs>
+      <path d="M50 88 C20 66 6 50 6 32 C6 18 17 8 30 8 C39 8 46 13 50 21 C54 13 61 8 70 8 C83 8 94 18 94 32 C94 50 80 66 50 88 Z" fill="url(#hg)"/>
+      <ellipse cx="30" cy="28" rx="9" ry="6" fill="#fff" opacity=".45" transform="rotate(-25 30 28)"/>
+    </svg>
+  </div>
+
+  <p class="eyebrow">tenho uma pergunta importante…</p>
+  <h1>Quer namorar comigo?</h1>
+  <p class="sub" id="sub">Pensa com carinho, tá? 💜</p>
+
+  <div class="buttons" id="buttons">
+    <button id="yes" type="button">Sim! 💛</button>
+    <button id="no" type="button">Não</button>
+  </div>
+
+  <p class="footnote">(só existe uma resposta certa)</p>
+</main>
+
+<section class="celebrate" id="celebrate" aria-live="polite">
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <div class="scene">
+    <div class="couple" aria-hidden="true">
+      <div class="critter left">
+        <span class="eye l"></span><span class="eye r"></span>
+        <span class="cheek l"></span><span class="cheek r"></span>
+        <span class="mouth"></span><span class="arm"></span>
+      </div>
+      <svg class="big-heart" viewBox="0 0 100 100">
+        <path d="M50 88 C20 66 6 50 6 32 C6 18 17 8 30 8 C39 8 46 13 50 21 C54 13 61 8 70 8 C83 8 94 18 94 32 C94 50 80 66 50 88 Z" fill="url(#hg)"/>
+        <ellipse cx="30" cy="28" rx="9" ry="6" fill="#fff" opacity=".45" transform="rotate(-25 30 28)"/>
+      </svg>
+      <div class="critter right">
+        <span class="eye l"></span><span class="eye r"></span>
+        <span class="cheek l"></span><span class="cheek r"></span>
+        <span class="mouth"></span><span class="arm"></span>
+      </div>
+      <div class="mini-hearts">
+        <span style="--x:-60px; --delay:0s">♥</span>
+        <span style="--x:50px; --delay:.4s">♥</span>
+        <span style="--x:-20px; --delay:.8s">♥</span>
+        <span style="--x:70px; --delay:1.2s">♥</span>
+        <span style="--x:-80px; --delay:1.6s">♥</span>
+        <span style="--x:10px; --delay:2s">♥</span>
+      </div>
+    </div>
+
+    <p class="yay" id="yay">EBAAA!</p>
+    <p class="love-note">Eu sabia que você ia dizer sim! Agora você é meu amor oficial 💜</p>
+    <span class="stamp">namoro aprovado ✓</span>
+  </div>
+</section>
+
+<script>
+(() => {
+  const sky = document.getElementById('sky');
+  const yes = document.getElementById('yes');
+  const no = document.getElementById('no');
+  const sub = document.getElementById('sub');
+  const celebrate = document.getElementById('celebrate');
+
+  // céu estrelado + coraçõezinhos subindo
+  for (let i = 0; i < 45; i++) {
+    const s = document.createElement('span');
+    s.className = 'star';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.setProperty('--s', (Math.random() * 3 + 1.5) + 'px');
+    s.style.setProperty('--d', (Math.random() * 3 + 2) + 's');
+    s.style.setProperty('--delay', (Math.random() * 3) + 's');
+    sky.appendChild(s);
+  }
+  for (let i = 0; i < 14; i++) {
+    const h = document.createElement('span');
+    h.className = 'floaty';
+    h.textContent = i % 3 === 0 ? '★' : '♥';
+    h.style.left = Math.random() * 100 + '%';
+    h.style.color = i % 3 === 0 ? 'var(--butter)' : 'var(--lilac)';
+    h.style.setProperty('--fs', (Math.random() * 16 + 14) + 'px');
+    h.style.setProperty('--d', (Math.random() * 8 + 10) + 's');
+    h.style.setProperty('--delay', (-Math.random() * 15) + 's');
+    sky.appendChild(h);
+  }
+
+  // o botão "não" que foge
+  const pleas = [
+    'Ops, escorregou! 😅',
+    'Tem certeza? 🥺',
+    'Pensa melhor…',
+    'O botão não quer ser clicado!',
+    'Olha que lindo o botão amarelo 👉',
+    'Você não vai me pegar! 🏃‍♂️',
+    'Desiste, vai 💜',
+    'Só aceito SIM como resposta!',
+    'Cada vez mais difícil, hein?',
+    'O SIM tá ficando maior… 👀'
+  ];
+  let tries = 0;
+
+  function runAway(e) {
+    if (e) e.preventDefault();
+    tries++;
+
+    const rect = no.getBoundingClientRect();
+    if (!no.classList.contains('running')) {
+      // fixa onde está antes de sair correndo, para a transição partir do lugar certo
+      no.style.left = rect.left + 'px';
+      no.style.top = rect.top + 'px';
+      no.classList.add('running');
+      // sai do cartão: o backdrop-filter dele prenderia o position: fixed
+      document.body.appendChild(no);
+      no.getBoundingClientRect();
+    }
+
+    const pad = 16;
+    const maxX = window.innerWidth - rect.width - pad;
+    const maxY = window.innerHeight - rect.height - pad;
+    const yesRect = yes.getBoundingClientRect();
+    let x, y, guard = 0;
+
+    // procura um lugar longe do cursor atual e sem cobrir o botão "sim"
+    do {
+      x = pad + Math.random() * Math.max(0, maxX - pad);
+      y = pad + Math.random() * Math.max(0, maxY - pad);
+      guard++;
+    } while (guard < 40 && (
+      Math.hypot(x - rect.left, y - rect.top) < 140 ||
+      (x < yesRect.right + 10 && x + rect.width > yesRect.left - 10 &&
+       y < yesRect.bottom + 10 && y + rect.height > yesRect.top - 10)
+    ));
+
+    no.style.left = x + 'px';
+    no.style.top = y + 'px';
+    no.style.transform = `rotate(${(Math.random() * 30 - 15).toFixed(1)}deg) scale(${Math.max(.6, 1 - tries * .03)})`;
+
+    sub.textContent = pleas[(tries - 1) % pleas.length];
+    sub.style.color = 'var(--butter)';
+    yes.style.setProperty('--grow', Math.min(1.8, 1 + tries * .07).toFixed(2));
+  }
+
+  no.addEventListener('mouseenter', runAway);
+  no.addEventListener('pointerdown', runAway);
+  no.addEventListener('touchstart', runAway, { passive: false });
+  no.addEventListener('click', runAway);
+  no.addEventListener('focus', () => { if (tries > 0) runAway(); });
+
+  window.addEventListener('resize', () => {
+    if (!no.classList.contains('running')) return;
+    const r = no.getBoundingClientRect();
+    no.style.left = Math.min(r.left, window.innerWidth - r.width - 16) + 'px';
+    no.style.top = Math.min(r.top, window.innerHeight - r.height - 16) + 'px';
+  });
+
+  // ======== o SIM ========
+  const yay = document.getElementById('yay');
+  yay.innerHTML = [...yay.textContent].map((c, i) => `<span style="--i:${i}">${c}</span>`).join('');
+
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  const colors = ['#ffd84d', '#ffb300', '#c9a7ff', '#7b3fe4', '#ff8fc7', '#fff8e1'];
+  let parts = [];
+  let running = false;
+
+  function size() {
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = innerWidth * dpr;
+    canvas.height = innerHeight * dpr;
+    canvas.style.width = innerWidth + 'px';
+    canvas.style.height = innerHeight + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', size);
+
+  function heartPath(c, s) {
+    c.beginPath();
+    c.moveTo(0, s * .3);
+    c.bezierCurveTo(-s * .5, -s * .1, -s * .5, -s * .6, 0, -s * .3);
+    c.bezierCurveTo(s * .5, -s * .6, s * .5, -s * .1, 0, s * .3);
+    c.closePath();
+  }
+  function starPath(c, s) {
+    c.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const r = i % 2 ? s * .22 : s * .5;
+      const a = (Math.PI / 5) * i - Math.PI / 2;
+      c.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+    }
+    c.closePath();
+  }
+
+  function burst(x, y, n) {
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const v = Math.random() * 9 + 4;
+      parts.push({
+        x, y,
+        vx: Math.cos(a) * v,
+        vy: Math.sin(a) * v - 4,
+        s: Math.random() * 14 + 10,
+        r: Math.random() * Math.PI,
+        vr: (Math.random() - .5) * .2,
+        c: colors[(Math.random() * colors.length) | 0],
+        k: Math.random() < .6 ? 'heart' : (Math.random() < .5 ? 'star' : 'dot'),
+        life: 1
+      });
+    }
+  }
+
+  function rain() {
+    for (let i = 0; i < 2; i++) {
+      parts.push({
+        x: Math.random() * innerWidth, y: -20,
+        vx: (Math.random() - .5) * 1.5, vy: Math.random() * 2 + 1.5,
+        s: Math.random() * 12 + 8, r: 0, vr: (Math.random() - .5) * .05,
+        c: colors[(Math.random() * colors.length) | 0],
+        k: Math.random() < .7 ? 'heart' : 'star', life: 1, slow: true
+      });
+    }
+  }
+
+  function tick() {
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    if (running && Math.random() < .5) rain();
+    parts = parts.filter(p => p.life > 0 && p.y < innerHeight + 40);
+    for (const p of parts) {
+      if (p.slow) {
+        p.x += p.vx + Math.sin(p.y / 40) * .6;
+        p.y += p.vy;
+      } else {
+        p.vx *= .985;
+        p.vy = p.vy * .985 + .22;
+        p.x += p.vx; p.y += p.vy;
+        p.life -= .006;
+      }
+      p.r += p.vr;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, Math.min(1, p.life));
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.r);
+      ctx.fillStyle = p.c;
+      if (p.k === 'heart') { heartPath(ctx, p.s); ctx.fill(); }
+      else if (p.k === 'star') { starPath(ctx, p.s); ctx.fill(); }
+      else { ctx.beginPath(); ctx.arc(0, 0, p.s * .2, 0, Math.PI * 2); ctx.fill(); }
+      ctx.restore();
+    }
+    requestAnimationFrame(tick);
+  }
+
+  yes.addEventListener('click', () => {
+    if (running) return;
+    running = true;
+    no.hidden = true;
+    size();
+    celebrate.classList.add('show');
+    const cx = innerWidth / 2, cy = innerHeight / 2;
+    burst(cx, cy, 140);
+    setTimeout(() => burst(innerWidth * .2, innerHeight * .3, 70), 350);
+    setTimeout(() => burst(innerWidth * .8, innerHeight * .3, 70), 600);
+    setTimeout(() => burst(cx, innerHeight * .25, 90), 900);
+    tick();
+  });
+
+  // um clique na tela de comemoração solta mais corações onde tocar
+  celebrate.addEventListener('pointerdown', e => burst(e.clientX, e.clientY, 40));
+})();
+</script>
+</body>
+</html>
